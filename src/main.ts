@@ -4,12 +4,30 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({ logger: true }),
+    {
+      logger: ['log', 'error', 'warn'],
+    },
   );
+
+  const config = new DocumentBuilder()
+    .setTitle('Backend')
+    .setDescription('Backend api documentation')
+    .setVersion('1.0')
+    .addTag('Auth', 'all endpoints which related to auth')
+    .build();
+
+  const documentFactory = () =>
+    SwaggerModule.createDocument(app, config, {
+      autoTagControllers: false,
+    });
+  SwaggerModule.setup('api', app, documentFactory);
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
