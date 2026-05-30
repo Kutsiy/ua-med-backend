@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { LoggerModule, nativeLoggerOptions } from 'nestjs-pino';
 import { Response, Request } from 'express';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -58,8 +57,7 @@ import { join } from 'path';
       sortSchema: true,
       playground: true,
     }),
+    AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
