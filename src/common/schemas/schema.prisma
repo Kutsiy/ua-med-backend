@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  output   = "../generated/prisma"
   moduleFormat    = "cjs"
 }
 
@@ -15,7 +15,7 @@ model Account {
   email        String   @unique
   phoneNumber  String   @unique
   createdAt    DateTime @default(now())
-  deletedAt    DateTime
-  bannedAt     DateTime
-  lastOnlineAt DateTime
+  deletedAt    DateTime? 
+  bannedAt     DateTime?
+  lastOnlineAt DateTime?
 }

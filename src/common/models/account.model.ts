@@ -1,7 +1,19 @@
 import { Field, ObjectType, ID } from '@nestjs/graphql';
+import type { AccountModel as PrismaAccountModel } from '@app/common/generated/prisma/models';
 
 @ObjectType()
-export class Account {
+export class Account implements Pick<
+  PrismaAccountModel,
+  | 'id'
+  | 'firstName'
+  | 'secondName'
+  | 'email'
+  | 'phoneNumber'
+  | 'createdAt'
+  | 'deletedAt'
+  | 'bannedAt'
+  | 'lastOnlineAt'
+> {
   @Field(() => ID)
   id!: string;
 
@@ -13,7 +25,7 @@ export class Account {
 
   phoneNumber!: string;
 
-  createdAt: Date | null = null;
+  createdAt: Date = new Date();
 
   deletedAt: Date | null = null;
 
