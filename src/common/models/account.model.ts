@@ -1,9 +1,9 @@
 import { Field, ObjectType, ID } from '@nestjs/graphql';
-import type { AccountModel as PrismaAccountModel } from '@app/common/generated/prisma/models';
+import type { AccountModel } from '@app/common/generated/prisma/models';
 
 @ObjectType()
 export class Account implements Pick<
-  PrismaAccountModel,
+  AccountModel,
   | 'id'
   | 'firstName'
   | 'secondName'

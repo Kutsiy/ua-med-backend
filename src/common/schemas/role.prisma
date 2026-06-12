@@ -2,5 +2,5 @@ model Role {
     id          String       @id @unique
     name        String       @unique
     description String?
-    permissions Permission[] @relation("RolePermissions")
+    permissions RolePermission[]
 }
