@@ -1,8 +1,8 @@
 model RefreshToken {
   id        String   @id @unique
   token     String   @unique
-  accountId String
-  account   Account  @relation(fields: [accountId], references: [id])
+  userId String
+  user   User  @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   expiresAt DateTime
   expired   Boolean  @default(false)

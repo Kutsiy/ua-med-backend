@@ -1,4 +1,4 @@
-model Account {
+model User {
   id           String      @id @unique
   firstName    String
   secondName   String

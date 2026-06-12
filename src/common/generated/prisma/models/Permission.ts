@@ -273,6 +273,10 @@ export type PermissionScalarRelationFilter = {
   isNot?: Prisma.PermissionWhereInput
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type PermissionCreateNestedOneWithoutRoleInput = {
   create?: Prisma.XOR<Prisma.PermissionCreateWithoutRoleInput, Prisma.PermissionUncheckedCreateWithoutRoleInput>
   connectOrCreate?: Prisma.PermissionCreateOrConnectWithoutRoleInput

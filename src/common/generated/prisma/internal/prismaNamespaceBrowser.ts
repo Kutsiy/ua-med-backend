@@ -51,11 +51,11 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Account: 'Account',
   RefreshToken: 'RefreshToken',
   Permission: 'Permission',
   RolePermission: 'RolePermission',
-  Role: 'Role'
+  Role: 'Role',
+  User: 'User'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -74,27 +74,10 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const AccountScalarFieldEnum = {
-  id: 'id',
-  firstName: 'firstName',
-  secondName: 'secondName',
-  middleName: 'middleName',
-  birthDate: 'birthDate',
-  email: 'email',
-  phoneNumber: 'phoneNumber',
-  createdAt: 'createdAt',
-  deletedAt: 'deletedAt',
-  bannedAt: 'bannedAt',
-  lastOnlineAt: 'lastOnlineAt'
-} as const
-
-export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
-
-
 export const RefreshTokenScalarFieldEnum = {
   id: 'id',
   token: 'token',
-  accountId: 'accountId',
+  userId: 'userId',
   createdAt: 'createdAt',
   expiresAt: 'expiresAt',
   expired: 'expired'
@@ -127,6 +110,23 @@ export const RoleScalarFieldEnum = {
 } as const
 
 export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
+
+
+export const UserScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  secondName: 'secondName',
+  middleName: 'middleName',
+  birthDate: 'birthDate',
+  email: 'email',
+  phoneNumber: 'phoneNumber',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt',
+  bannedAt: 'bannedAt',
+  lastOnlineAt: 'lastOnlineAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
 export const SortOrder = {

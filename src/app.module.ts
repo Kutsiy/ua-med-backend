@@ -6,6 +6,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { AuthModule } from './modules/auth/auth.module';
       playground: true,
     }),
     AuthModule,
+    UsersModule,
   ],
 })
 export class AppModule {}

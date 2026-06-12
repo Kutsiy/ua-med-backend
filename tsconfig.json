@@ -23,6 +23,7 @@
     "types": ["node", "jest"],
     "paths": {
       "@app/*": ["./src/*"],
+      "@common/*": ["./src/common/*"],
       "@app/utils": ["./libs/utils/src"],
       "@app/utils/*": ["./libs/utils/src/*"]
     }
