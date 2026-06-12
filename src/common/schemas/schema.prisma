@@ -7,15 +7,3 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
-
-model Account {
-  id           String      @id @unique
-  firstName    String
-  secondName   String
-  email        String   @unique
-  phoneNumber  String   @unique
-  createdAt    DateTime @default(now())
-  deletedAt    DateTime? 
-  bannedAt     DateTime?
-  lastOnlineAt DateTime?
-}

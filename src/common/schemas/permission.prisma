@@ -1,0 +1,7 @@
+model Permission {
+  id          String   @id @unique
+  name        String   @unique
+  description String?
+  roleId      String
+  role        Role @relation("RolePermissions", fields: [roleId], references: [id])
+}

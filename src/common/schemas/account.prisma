@@ -1,0 +1,14 @@
+model Account {
+  id           String      @id @unique
+  firstName    String
+  secondName   String
+  middleName String?
+  birthDate   DateTime?
+  email        String   @unique
+  phoneNumber  String   @unique
+  createdAt    DateTime @default(now())
+  deletedAt    DateTime? 
+  bannedAt     DateTime?
+  lastOnlineAt DateTime?
+  refreshTokens RefreshToken[]
+}

@@ -28,6 +28,8 @@ export type AccountMinAggregateOutputType = {
   id: string | null
   firstName: string | null
   secondName: string | null
+  middleName: string | null
+  birthDate: Date | null
   email: string | null
   phoneNumber: string | null
   createdAt: Date | null
@@ -40,6 +42,8 @@ export type AccountMaxAggregateOutputType = {
   id: string | null
   firstName: string | null
   secondName: string | null
+  middleName: string | null
+  birthDate: Date | null
   email: string | null
   phoneNumber: string | null
   createdAt: Date | null
@@ -52,6 +56,8 @@ export type AccountCountAggregateOutputType = {
   id: number
   firstName: number
   secondName: number
+  middleName: number
+  birthDate: number
   email: number
   phoneNumber: number
   createdAt: number
@@ -66,6 +72,8 @@ export type AccountMinAggregateInputType = {
   id?: true
   firstName?: true
   secondName?: true
+  middleName?: true
+  birthDate?: true
   email?: true
   phoneNumber?: true
   createdAt?: true
@@ -78,6 +86,8 @@ export type AccountMaxAggregateInputType = {
   id?: true
   firstName?: true
   secondName?: true
+  middleName?: true
+  birthDate?: true
   email?: true
   phoneNumber?: true
   createdAt?: true
@@ -90,6 +100,8 @@ export type AccountCountAggregateInputType = {
   id?: true
   firstName?: true
   secondName?: true
+  middleName?: true
+  birthDate?: true
   email?: true
   phoneNumber?: true
   createdAt?: true
@@ -175,6 +187,8 @@ export type AccountGroupByOutputType = {
   id: string
   firstName: string
   secondName: string
+  middleName: string | null
+  birthDate: Date | null
   email: string
   phoneNumber: string
   createdAt: Date
@@ -208,24 +222,30 @@ export type AccountWhereInput = {
   id?: Prisma.StringFilter<"Account"> | string
   firstName?: Prisma.StringFilter<"Account"> | string
   secondName?: Prisma.StringFilter<"Account"> | string
+  middleName?: Prisma.StringNullableFilter<"Account"> | string | null
+  birthDate?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   email?: Prisma.StringFilter<"Account"> | string
   phoneNumber?: Prisma.StringFilter<"Account"> | string
   createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   bannedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   lastOnlineAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  refreshTokens?: Prisma.RefreshTokenListRelationFilter
 }
 
 export type AccountOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   secondName?: Prisma.SortOrder
+  middleName?: Prisma.SortOrderInput | Prisma.SortOrder
+  birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   bannedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastOnlineAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
 }
 
 export type AccountWhereUniqueInput = Prisma.AtLeast<{
@@ -237,16 +257,21 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
   firstName?: Prisma.StringFilter<"Account"> | string
   secondName?: Prisma.StringFilter<"Account"> | string
+  middleName?: Prisma.StringNullableFilter<"Account"> | string | null
+  birthDate?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   bannedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   lastOnlineAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  refreshTokens?: Prisma.RefreshTokenListRelationFilter
 }, "id" | "id" | "email" | "phoneNumber">
 
 export type AccountOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   secondName?: Prisma.SortOrder
+  middleName?: Prisma.SortOrderInput | Prisma.SortOrder
+  birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -265,6 +290,8 @@ export type AccountScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Account"> | string
   firstName?: Prisma.StringWithAggregatesFilter<"Account"> | string
   secondName?: Prisma.StringWithAggregatesFilter<"Account"> | string
+  middleName?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  birthDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
   email?: Prisma.StringWithAggregatesFilter<"Account"> | string
   phoneNumber?: Prisma.StringWithAggregatesFilter<"Account"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Account"> | Date | string
@@ -277,54 +304,68 @@ export type AccountCreateInput = {
   id: string
   firstName: string
   secondName: string
+  middleName?: string | null
+  birthDate?: Date | string | null
   email: string
   phoneNumber: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
   bannedAt?: Date | string | null
   lastOnlineAt?: Date | string | null
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateInput = {
   id: string
   firstName: string
   secondName: string
+  middleName?: string | null
+  birthDate?: Date | string | null
   email: string
   phoneNumber: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
   bannedAt?: Date | string | null
   lastOnlineAt?: Date | string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   secondName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOnlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   secondName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOnlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateManyInput = {
   id: string
   firstName: string
   secondName: string
+  middleName?: string | null
+  birthDate?: Date | string | null
   email: string
   phoneNumber: string
   createdAt?: Date | string
@@ -337,6 +378,8 @@ export type AccountUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   secondName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -349,6 +392,8 @@ export type AccountUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   secondName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -361,6 +406,8 @@ export type AccountCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   secondName?: Prisma.SortOrder
+  middleName?: Prisma.SortOrder
+  birthDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -373,6 +420,8 @@ export type AccountMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   secondName?: Prisma.SortOrder
+  middleName?: Prisma.SortOrder
+  birthDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -385,6 +434,8 @@ export type AccountMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   secondName?: Prisma.SortOrder
+  middleName?: Prisma.SortOrder
+  birthDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -393,36 +444,166 @@ export type AccountMinOrderByAggregateInput = {
   lastOnlineAt?: Prisma.SortOrder
 }
 
+export type AccountScalarRelationFilter = {
+  is?: Prisma.AccountWhereInput
+  isNot?: Prisma.AccountWhereInput
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
+export type AccountCreateNestedOneWithoutRefreshTokensInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutRefreshTokensInput, Prisma.AccountUncheckedCreateWithoutRefreshTokensInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutRefreshTokensInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneRequiredWithoutRefreshTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutRefreshTokensInput, Prisma.AccountUncheckedCreateWithoutRefreshTokensInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutRefreshTokensInput
+  upsert?: Prisma.AccountUpsertWithoutRefreshTokensInput
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutRefreshTokensInput, Prisma.AccountUpdateWithoutRefreshTokensInput>, Prisma.AccountUncheckedUpdateWithoutRefreshTokensInput>
+}
+
+export type AccountCreateWithoutRefreshTokensInput = {
+  id: string
+  firstName: string
+  secondName: string
+  middleName?: string | null
+  birthDate?: Date | string | null
+  email: string
+  phoneNumber: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  bannedAt?: Date | string | null
+  lastOnlineAt?: Date | string | null
+}
+
+export type AccountUncheckedCreateWithoutRefreshTokensInput = {
+  id: string
+  firstName: string
+  secondName: string
+  middleName?: string | null
+  birthDate?: Date | string | null
+  email: string
+  phoneNumber: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  bannedAt?: Date | string | null
+  lastOnlineAt?: Date | string | null
+}
+
+export type AccountCreateOrConnectWithoutRefreshTokensInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutRefreshTokensInput, Prisma.AccountUncheckedCreateWithoutRefreshTokensInput>
+}
+
+export type AccountUpsertWithoutRefreshTokensInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutRefreshTokensInput, Prisma.AccountUncheckedUpdateWithoutRefreshTokensInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutRefreshTokensInput, Prisma.AccountUncheckedCreateWithoutRefreshTokensInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutRefreshTokensInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutRefreshTokensInput, Prisma.AccountUncheckedUpdateWithoutRefreshTokensInput>
+}
+
+export type AccountUpdateWithoutRefreshTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  secondName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastOnlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type AccountUncheckedUpdateWithoutRefreshTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  secondName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastOnlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+
+/**
+ * Count Type AccountCountOutputType
+ */
+
+export type AccountCountOutputType = {
+  refreshTokens: number
+}
+
+export type AccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  refreshTokens?: boolean | AccountCountOutputTypeCountRefreshTokensArgs
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AccountCountOutputType
+   */
+  select?: Prisma.AccountCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountRefreshTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RefreshTokenWhereInput
+}
 
 
 export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   firstName?: boolean
   secondName?: boolean
+  middleName?: boolean
+  birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
   createdAt?: boolean
   deletedAt?: boolean
   bannedAt?: boolean
   lastOnlineAt?: boolean
+  refreshTokens?: boolean | Prisma.Account$refreshTokensArgs<ExtArgs>
+  _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["account"]>
 
 export type AccountSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   firstName?: boolean
   secondName?: boolean
+  middleName?: boolean
+  birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
   createdAt?: boolean
@@ -435,6 +616,8 @@ export type AccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   firstName?: boolean
   secondName?: boolean
+  middleName?: boolean
+  birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
   createdAt?: boolean
@@ -447,6 +630,8 @@ export type AccountSelectScalar = {
   id?: boolean
   firstName?: boolean
   secondName?: boolean
+  middleName?: boolean
+  birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
   createdAt?: boolean
@@ -455,15 +640,25 @@ export type AccountSelectScalar = {
   lastOnlineAt?: boolean
 }
 
-export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "secondName" | "email" | "phoneNumber" | "createdAt" | "deletedAt" | "bannedAt" | "lastOnlineAt", ExtArgs["result"]["account"]>
+export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "secondName" | "middleName" | "birthDate" | "email" | "phoneNumber" | "createdAt" | "deletedAt" | "bannedAt" | "lastOnlineAt", ExtArgs["result"]["account"]>
+export type AccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  refreshTokens?: boolean | Prisma.Account$refreshTokensArgs<ExtArgs>
+  _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type AccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type AccountIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Account"
-  objects: {}
+  objects: {
+    refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     firstName: string
     secondName: string
+    middleName: string | null
+    birthDate: Date | null
     email: string
     phoneNumber: string
     createdAt: Date
@@ -864,6 +1059,7 @@ readonly fields: AccountFieldRefs;
  */
 export interface Prisma__AccountClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  refreshTokens<T extends Prisma.Account$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -896,6 +1092,8 @@ export interface AccountFieldRefs {
   readonly id: Prisma.FieldRef<"Account", 'String'>
   readonly firstName: Prisma.FieldRef<"Account", 'String'>
   readonly secondName: Prisma.FieldRef<"Account", 'String'>
+  readonly middleName: Prisma.FieldRef<"Account", 'String'>
+  readonly birthDate: Prisma.FieldRef<"Account", 'DateTime'>
   readonly email: Prisma.FieldRef<"Account", 'String'>
   readonly phoneNumber: Prisma.FieldRef<"Account", 'String'>
   readonly createdAt: Prisma.FieldRef<"Account", 'DateTime'>
@@ -919,6 +1117,10 @@ export type AccountFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  /**
    * Filter, which Account to fetch.
    */
   where: Prisma.AccountWhereUniqueInput
@@ -937,6 +1139,10 @@ export type AccountFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  /**
    * Filter, which Account to fetch.
    */
   where: Prisma.AccountWhereUniqueInput
@@ -954,6 +1160,10 @@ export type AccountFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the Account
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
   /**
    * Filter, which Account to fetch.
    */
@@ -1003,6 +1213,10 @@ export type AccountFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  /**
    * Filter, which Account to fetch.
    */
   where?: Prisma.AccountWhereInput
@@ -1050,6 +1264,10 @@ export type AccountFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Account
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
   /**
    * Filter, which Accounts to fetch.
    */
@@ -1099,6 +1317,10 @@ export type AccountCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  /**
    * The data needed to create a Account.
    */
   data: Prisma.XOR<Prisma.AccountCreateInput, Prisma.AccountUncheckedCreateInput>
@@ -1146,6 +1368,10 @@ export type AccountUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Account
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
   /**
    * The data needed to update a Account.
    */
@@ -1213,6 +1439,10 @@ export type AccountUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  /**
    * The filter to search for the Account to update in case it exists.
    */
   where: Prisma.AccountWhereUniqueInput
@@ -1239,6 +1469,10 @@ export type AccountDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  /**
    * Filter which Account to delete.
    */
   where: Prisma.AccountWhereUniqueInput
@@ -1259,6 +1493,30 @@ export type AccountDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
+ * Account.refreshTokens
+ */
+export type Account$refreshTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RefreshToken
+   */
+  select?: Prisma.RefreshTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RefreshToken
+   */
+  omit?: Prisma.RefreshTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RefreshTokenInclude<ExtArgs> | null
+  where?: Prisma.RefreshTokenWhereInput
+  orderBy?: Prisma.RefreshTokenOrderByWithRelationInput | Prisma.RefreshTokenOrderByWithRelationInput[]
+  cursor?: Prisma.RefreshTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RefreshTokenScalarFieldEnum | Prisma.RefreshTokenScalarFieldEnum[]
+}
+
+/**
  * Account without action
  */
 export type AccountDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1270,4 +1528,8 @@ export type AccountDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Account
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
 }
