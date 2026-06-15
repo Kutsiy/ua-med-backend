@@ -24,6 +24,7 @@
     "paths": {
       "@app/*": ["./src/*"],
       "@common/*": ["./src/common/*"],
+      "@modules/*": ["./src/modules/*"],
       "@app/utils": ["./libs/utils/src"],
       "@app/utils/*": ["./libs/utils/src/*"]
     }
