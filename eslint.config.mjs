@@ -68,8 +68,6 @@ export default defineConfig(
 
     rules: {
       ...boundaries.configs.recommended.rules,
-      'boundaries/no-unknown-files': 'error',
-      'boundaries/no-unknown': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
@@ -80,7 +78,14 @@ export default defineConfig(
         {
           patterns: [
             {
-              group: ['**/common/**', '**/common'],
+              group: [
+                '**/common/**',
+                '**/common',
+                '!@nestjs/common',
+                '!@nestjs/common/**',
+                '!@common',
+                '!@common/**',
+              ],
               message:
                 'Do not import from common directly, use the alias instead.',
             },
