@@ -1,5 +1,5 @@
 import { Field, ObjectType, ID } from '@nestjs/graphql';
-import type { RoleModel } from '@app/common/generated/prisma/models';
+import type { RoleModel } from '@common/generated/prisma/models';
 
 @ObjectType()
 export class Role implements Pick<RoleModel, 'id' | 'name' | 'description'> {

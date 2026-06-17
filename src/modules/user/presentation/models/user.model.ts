@@ -1,5 +1,5 @@
 import { Field, ObjectType, ID } from '@nestjs/graphql';
-import type { UserModel } from '@app/common/generated/prisma/models';
+import type { UserModel } from '@common/generated/prisma/models';
 
 @ObjectType()
 export class User implements Pick<

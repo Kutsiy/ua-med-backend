@@ -11,4 +11,6 @@ model User {
   bannedAt     DateTime?
   lastOnlineAt DateTime?
   refreshTokens RefreshToken[]
+
+  @@map("user")
 }

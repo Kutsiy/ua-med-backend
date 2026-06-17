@@ -6,4 +6,6 @@ model RefreshToken {
   createdAt DateTime @default(now())
   expiresAt DateTime
   expired   Boolean  @default(false)
+
+  @@map("refresh_tokens")
 }

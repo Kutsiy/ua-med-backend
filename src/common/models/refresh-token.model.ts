@@ -1,5 +1,5 @@
 import { Field, ObjectType, ID } from '@nestjs/graphql';
-import type { RefreshTokenModel } from '@app/common/generated/prisma/models';
+import type { RefreshTokenModel } from '@common/generated/prisma/models';
 
 @ObjectType()
 export class RefreshToken implements Pick<

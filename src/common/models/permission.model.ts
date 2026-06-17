@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import type { PermissionModel } from '@app/common/generated/prisma/models';
+import type { PermissionModel } from '@common/generated/prisma/models';
 
 @ObjectType()
 export class Permission implements Pick<

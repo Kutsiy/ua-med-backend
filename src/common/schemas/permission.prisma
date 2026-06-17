@@ -3,4 +3,6 @@ model Permission {
   name        String   @unique
   description String?
   role        RolePermission[]
+
+  @@map("permissions")
 }

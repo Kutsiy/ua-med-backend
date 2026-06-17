@@ -1,4 +1,4 @@
-import { UserModel } from '@app/common/generated/prisma/models';
+import { UserModel } from '@common/generated/prisma/models';
 import { UserEntity } from '@modules/user/domain';
 
 export class UserMapper {

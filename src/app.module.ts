@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { Module } from '@nestjs/common';
 import { LoggerModule, nativeLoggerOptions } from 'nestjs-pino';
 import { Response, Request } from 'express';
