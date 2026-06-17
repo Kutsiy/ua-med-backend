@@ -11,6 +11,16 @@ export default defineConfig({
     '@typescript-eslint/no-unsafe-argument': 'warn',
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
 
+    // * Eslint-Sonar
+    'sonarjs/cognitive-complexity': ['warn', 15],
+    'sonarjs/no-identical-functions': 'warn',
+    'sonarjs/no-duplicated-branches': 'warn',
+    'sonarjs/no-identical-expressions': 'warn',
+    'sonarjs/no-redundant-boolean': 'warn',
+    'sonarjs/no-small-switch': 'warn',
+    'sonarjs/no-inverted-boolean-check': 'warn',
+    'sonarjs/prefer-single-boolean-return': 'warn',
+
     'no-restricted-imports': [
       'error',
       {

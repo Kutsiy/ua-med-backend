@@ -4,16 +4,19 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import eslint from '@eslint/js';
 import boundaries from 'eslint-plugin-boundaries';
+import sonarjs from 'eslint-plugin-sonarjs';
 
 export default defineConfig(
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   eslintPluginPrettierRecommended,
+  sonarjs.configs.recommended,
   {
     files: ['{src,apps,libs,test}/**/*.ts'],
 
     plugins: {
       boundaries,
+      sonarjs,
     },
 
     languageOptions: {
