@@ -5,12 +5,16 @@ import tseslint from 'typescript-eslint';
 import eslint from '@eslint/js';
 import boundaries from 'eslint-plugin-boundaries';
 import sonarjs from 'eslint-plugin-sonarjs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = path.resolve(dirname, '..');
 
 export default defineConfig(
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   eslintPluginPrettierRecommended,
-  sonarjs.configs.recommended,
   {
     files: ['{src,apps,libs,test}/**/*.ts'],
 
@@ -26,7 +30,7 @@ export default defineConfig(
       },
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: import.meta.dirname,
+        tsconfigRootDir: rootDir,
       },
     },
   },

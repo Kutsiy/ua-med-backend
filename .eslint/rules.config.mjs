@@ -1,5 +1,6 @@
 import { defineConfig } from 'eslint/config';
 import boundaries from 'eslint-plugin-boundaries';
+import sonarjs from 'eslint-plugin-sonarjs';
 
 export default defineConfig({
   files: ['{src,apps,libs,test}/**/*.ts'],
@@ -12,14 +13,14 @@ export default defineConfig({
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
 
     // * Eslint-Sonar
-    'sonarjs/cognitive-complexity': ['warn', 15],
-    'sonarjs/no-identical-functions': 'warn',
-    'sonarjs/no-duplicated-branches': 'warn',
-    'sonarjs/no-identical-expressions': 'warn',
-    'sonarjs/no-redundant-boolean': 'warn',
-    'sonarjs/no-small-switch': 'warn',
-    'sonarjs/no-inverted-boolean-check': 'warn',
-    'sonarjs/prefer-single-boolean-return': 'warn',
+    'sonarjs/cognitive-complexity': ['error', 15],
+    'sonarjs/no-identical-functions': 'error',
+    'sonarjs/no-duplicated-branches': 'error',
+    'sonarjs/no-identical-expressions': 'error',
+    'sonarjs/no-redundant-boolean': 'error',
+    'sonarjs/no-small-switch': 'error',
+    'sonarjs/no-inverted-boolean-check': 'error',
+    'sonarjs/prefer-single-boolean-return': 'error',
 
     'no-restricted-imports': [
       'error',
