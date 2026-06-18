@@ -3,9 +3,10 @@
 import 'dotenv/config';
 import { defineConfig, env } from 'prisma/config';
 import dotenv from 'dotenv';
+import process from 'process';
 
 dotenv.config({
-  path: '.env.development',
+  path: process.env.NODE_ENV === 'development' ? '.env.development' : '.env',
 });
 
 export default defineConfig({

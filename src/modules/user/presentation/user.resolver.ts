@@ -1,5 +1,10 @@
-import { Resolver } from '@nestjs/graphql';
-import { User } from '@common/models';
+import { Resolver, Query } from '@nestjs/graphql';
+import { User } from './models/user.model';
 
 @Resolver(() => User)
-export class UsersResolver {}
+export class UsersResolver {
+  @Query(() => String)
+  health(): string {
+    return 'ok';
+  }
+}

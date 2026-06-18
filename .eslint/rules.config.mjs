@@ -60,18 +60,24 @@ export default defineConfig({
           },
           {
             from: { type: 'services' },
-            allow: { to: { type: ['services', 'domain'] } },
+            allow: {
+              to: { type: ['services', 'domain'] },
+            },
           },
           {
             from: { type: 'infrastructure' },
             allow: {
-              to: { type: ['infrastructure', 'services', 'domain'] },
+              to: {
+                type: ['infrastructure', 'services', 'domain'],
+              },
             },
           },
           {
             from: { type: 'presentation' },
             allow: {
-              to: { type: ['presentation', 'services', 'domain'] },
+              to: {
+                type: ['presentation', 'services', 'domain'],
+              },
             },
           },
         ],

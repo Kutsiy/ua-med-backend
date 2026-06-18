@@ -12,7 +12,7 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "./prismaNamespace.js"
+import type * as Prisma from "./prismaNamespace.ts"
 
 
 const config: runtime.GetPrismaClientConfig = {
@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.8.0",
   "engineVersion": "3c6e192761c0362d496ed980de936e2f3cebcd3a",
   "activeProvider": "postgresql",
-  "inlineSchema": "model RefreshToken {\n  id        String   @id @unique\n  token     String   @unique\n  userId    String\n  user      User     @relation(fields: [userId], references: [id])\n  createdAt DateTime @default(now())\n  expiresAt DateTime\n  expired   Boolean  @default(false)\n\n  @@map(\"refresh_tokens\")\n}\n\nmodel Permission {\n  id          String           @id @unique\n  name        String           @unique\n  description String?\n  role        RolePermission[]\n\n  @@map(\"permissions\")\n}\n\nmodel RolePermission {\n  roleId       String\n  permissionId String\n\n  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)\n  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)\n\n  @@id([roleId, permissionId])\n  @@map(\"role_permissions\")\n}\n\nmodel Role {\n  id          String           @id @unique\n  name        String           @unique\n  description String?\n  permissions RolePermission[]\n\n  @@map(\"roles\")\n}\n\ngenerator client {\n  provider     = \"prisma-client\"\n  output       = \"../generated/prisma\"\n  moduleFormat = \"esm\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id            String         @id @unique\n  firstName     String\n  secondName    String\n  middleName    String?\n  birthDate     DateTime?\n  email         String         @unique\n  phoneNumber   String         @unique\n  createdAt     DateTime       @default(now())\n  deletedAt     DateTime?\n  bannedAt      DateTime?\n  lastOnlineAt  DateTime?\n  refreshTokens RefreshToken[]\n\n  @@map(\"user\")\n}\n",
+  "inlineSchema": "model RefreshToken {\n  id        String   @id @unique\n  token     String   @unique\n  userId    String\n  user      User     @relation(fields: [userId], references: [id])\n  createdAt DateTime @default(now())\n  expiresAt DateTime\n  expired   Boolean  @default(false)\n\n  @@map(\"refresh_tokens\")\n}\n\nmodel Permission {\n  id          String           @id @unique\n  name        String           @unique\n  description String?\n  role        RolePermission[]\n\n  @@map(\"permissions\")\n}\n\nmodel RolePermission {\n  roleId       String\n  permissionId String\n\n  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)\n  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)\n\n  @@id([roleId, permissionId])\n  @@map(\"role_permissions\")\n}\n\nmodel Role {\n  id          String           @id @unique\n  name        String           @unique\n  description String?\n  permissions RolePermission[]\n\n  @@map(\"roles\")\n}\n\ngenerator client {\n  provider            = \"prisma-client\"\n  output              = \"../generated/prisma\"\n  moduleFormat        = \"cjs\"\n  importFileExtension = \"ts\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id            String         @id @unique\n  firstName     String\n  secondName    String\n  middleName    String?\n  birthDate     DateTime?\n  email         String         @unique\n  phoneNumber   String         @unique\n  createdAt     DateTime       @default(now())\n  deletedAt     DateTime?\n  bannedAt      DateTime?\n  lastOnlineAt  DateTime?\n  refreshTokens RefreshToken[]\n\n  @@map(\"user\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -45,10 +45,10 @@ async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Modul
 }
 
 config.compilerWasm = {
-  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.mjs"),
+  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.js"),
 
   getQueryCompilerWasmModule: async () => {
-    const { wasm } = await import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.wasm-base64.mjs")
+    const { wasm } = await import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.wasm-base64.js")
     return await decodeBase64AsWasm(wasm)
   },
 

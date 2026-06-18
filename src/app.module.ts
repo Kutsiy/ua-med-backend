@@ -5,8 +5,10 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { AuthModule } from './modules/auth/auth.module';
-import { UsersModule } from './modules/user/user.module';
+import { AuthModule } from '@modules/auth/auth.module';
+import { UsersModule } from '@modules/user/user.module';
+import { APP_FILTER } from '@nestjs/core';
+import { GlobalHttpExceptionFilter } from '@common/filters';
 
 @Module({
   imports: [
@@ -51,17 +53,22 @@ import { UsersModule } from './modules/user/user.module';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath:
-        process.env.NODE_ENV === 'development' ? '.env.development' : '.env',
+      envFilePath: process.env.NODE_ENV === 'development' ? '.env.development' : '.env',
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      autoSchemaFile: join(process.cwd(), 'src/common/generated/graphql/schema.gql'),
       sortSchema: true,
       playground: true,
     }),
     AuthModule,
     UsersModule,
+  ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: GlobalHttpExceptionFilter,
+    },
   ],
 })
 export class AppModule {}
