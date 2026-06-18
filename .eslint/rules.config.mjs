@@ -35,12 +35,15 @@ export default defineConfig({
               '!@common',
               '!@common/**',
             ],
-            message:
-              'Do not import from common directly, use the alias instead.',
+            message: 'Do not import from common directly, use the alias instead.',
           },
           {
             group: ['**/src/**', '**/src'],
             message: 'Do NOT import from src directly, use the alias instead.',
+          },
+          {
+            group: ['**/modules/**', '**/modules', '!@modules', '!@modules/**'],
+            message: 'Do not import from modules directly, use the alias instead.',
           },
         ],
       },

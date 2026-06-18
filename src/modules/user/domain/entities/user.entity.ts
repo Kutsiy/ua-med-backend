@@ -44,10 +44,7 @@ export class UserEntity {
     secondName,
     email,
     phoneNumber,
-  }: Omit<
-    UserEntity,
-    'id' | 'createdAt' | 'deletedAt' | 'bannedAt' | 'lastOnlineAt'
-  >) {
+  }: Omit<UserEntity, 'id' | 'createdAt' | 'deletedAt' | 'bannedAt' | 'lastOnlineAt'>) {
     return new UserEntity(
       crypto.randomUUID(),
       firstName,
