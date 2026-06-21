@@ -1,2 +1,2 @@
-export * from './mappers';
+export * from './mapper';
 export * from './repositories';

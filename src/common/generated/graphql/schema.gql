@@ -2,6 +2,47 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createUser(UserCreateInput: UserCreateInput!): User!
+  deleteUser(id: String!): String!
+  updateUserByEmail(UserUpdateInput: UserUpdateInput!, email: String!): User!
+}
+
 type Query {
-  health: String!
+  getUserByEmail(email: String!): User
+  getUserById(id: String!): User
+}
+
+type User {
+  bannedAt: DateTime
+  createdAt: DateTime!
+  deletedAt: DateTime
+  email: String!
+  firstName: String!
+  id: ID!
+  lastOnlineAt: DateTime
+  myBooking: [String!]
+  myRoles: [String!]
+  myToken: String
+  phoneNumber: String!
+  secondName: String!
+}
+
+input UserCreateInput {
+  email: String!
+  firstName: String!
+  middleName: String
+  phoneNumber: String!
+  secondName: String!
+}
+
+input UserUpdateInput {
+  firstName: String
+  middleName: String
+  secondName: String
 }

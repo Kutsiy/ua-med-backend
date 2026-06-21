@@ -33,9 +33,9 @@ export class User implements Pick<
 
   lastOnlineAt: Date | null = null;
 
-  myRoles: null = null;
+  myRoles: string[] | null = null;
 
-  myBooking: null = null;
+  myBooking: string[] | null = null;
 
-  myToken: null = null;
+  myToken: string | null = null;
 }

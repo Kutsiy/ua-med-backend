@@ -1,21 +1,6 @@
-import { UserModel } from '@common/generated/prisma/models';
 import { UserEntity } from '@modules/user/domain';
 
 export class UserMapper {
-  static toDomain(user: UserModel): UserEntity {
-    return new UserEntity(
-      user.id,
-      user.firstName,
-      user.secondName,
-      user.email,
-      user.phoneNumber,
-      user.createdAt,
-      user.deletedAt,
-      user.bannedAt,
-      user.lastOnlineAt,
-    );
-  }
-
   static toOutput(user: UserEntity) {
     return {
       id: user.id,

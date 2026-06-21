@@ -3,27 +3,38 @@ import { UserMapper } from '@modules/user/infrastructure';
 
 import { Prisma } from '@common/generated/prisma/client';
 import { PrismaService } from '@common/services';
+import { Injectable } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 
+@Injectable()
 export class UserRepository implements IUserRepository {
+  private readonly logger = new Logger(UserRepository.name);
   constructor(private readonly prismaService: PrismaService) {}
 
   async getUserById(id: string): Promise<UserEntity | null> {
+    this.logger.log(`get user by id = ${id}`);
     return await this.findUniqe({ id });
   }
 
   async getUserByEmail(email: string): Promise<UserEntity | null> {
+    this.logger.log(`get user by email = ${email}`);
     return await this.findUniqe({ email });
   }
 
   async createUser(user: UserEntity): Promise<UserEntity> {
-    return await this.create(user);
+    this.logger.log(`create a user`);
+    return await this.create(UserMapper.toObject(user));
   }
   async updateUserByEmail(user: UserEntity): Promise<UserEntity> {
-    return await this.update({ email: user.email }, user);
+    this.logger.log(`update the user`);
+    return await this.update({ email: user.email }, UserMapper.toUpdate(user));
   }
   async deleteUser(id: string): Promise<void> {
+    this.logger.log(`delete the user`);
     return await this.delete({ id });
   }
+
+  // * Main methods:
 
   private async findUniqe(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
