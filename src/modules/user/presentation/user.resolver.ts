@@ -6,6 +6,11 @@ import { UserService } from '@modules/user/services';
 export class UsersResolver {
   constructor(private readonly userService: UserService) {}
 
+  @Query(() => [User])
+  async getAllUsers() {
+    return await this.userService.getAllUsers();
+  }
+
   @Query(() => User, { nullable: true })
   async getUserById(@Args('id') id: string) {
     return await this.userService.getUserById(id);

@@ -1,6 +1,7 @@
 import { UserEntity } from '@modules/user/domain';
 
 export interface IUserRepository {
+  getAllUsers(): Promise<UserEntity[]>;
   getUserById(id: string): Promise<UserEntity | null>;
   getUserByEmail(email: string): Promise<UserEntity | null>;
   createUser(user: UserEntity): Promise<UserEntity>;

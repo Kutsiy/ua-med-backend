@@ -6,6 +6,11 @@ import { UserMapper, IUserCreateInput, IUserUpdateInput } from '@modules/user/se
 export class UserService {
   constructor(@Inject(USER_REPO) private readonly userRepository: IUserRepository) {}
 
+  async getAllUsers() {
+    const users = await this.userRepository.getAllUsers();
+    return users.map((user) => UserMapper.toOutput(user));
+  }
+
   async getUserById(id: string) {
     const user = await this.userRepository.getUserById(id);
     return user ? UserMapper.toOutput(user) : null;

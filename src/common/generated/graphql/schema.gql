@@ -14,6 +14,7 @@ type Mutation {
 }
 
 type Query {
+  getAllUsers: [User!]!
   getUserByEmail(email: String!): User
   getUserById(id: String!): User
 }

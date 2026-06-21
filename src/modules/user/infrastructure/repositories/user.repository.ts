@@ -11,6 +11,10 @@ export class UserRepository implements IUserRepository {
   private readonly logger = new Logger(UserRepository.name);
   constructor(private readonly prismaService: PrismaService) {}
 
+  async getAllUsers(): Promise<UserEntity[]> {
+    return await this.findAll();
+  }
+
   async getUserById(id: string): Promise<UserEntity | null> {
     this.logger.log(`get user by id = ${id}`);
     return await this.findUniqe({ id });
@@ -35,6 +39,11 @@ export class UserRepository implements IUserRepository {
   }
 
   // * Main methods:
+
+  private async findAll(): Promise<UserEntity[]> {
+    const users = await this.prismaService.user.findMany();
+    return users.map((user) => UserMapper.toDomain(user));
+  }
 
   private async findUniqe(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
