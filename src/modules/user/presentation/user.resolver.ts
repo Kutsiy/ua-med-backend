@@ -1,12 +1,15 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { User, UserCreateInput, UserUpdateInput } from '@modules/user/presentation';
 import { UserService } from '@modules/user/services';
+import { JwtAuthGuard } from '@common';
+import { UseGuards } from '@nestjs/common';
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(() => [User])
+  @UseGuards(JwtAuthGuard)
   async getAllUsers() {
     return await this.userService.getAllUsers();
   }
