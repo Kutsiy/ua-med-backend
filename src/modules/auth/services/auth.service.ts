@@ -2,6 +2,7 @@ import { UserService } from '@modules/user/services';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { IAuthLoginInput } from '@modules/auth/services';
 
 @Injectable()
 export class AuthService {
@@ -27,4 +28,6 @@ export class AuthService {
     }
     return;
   }
+
+  async login(loginInput: IAuthLoginInput) {}
 }

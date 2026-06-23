@@ -5,7 +5,7 @@ import { JwtAuthGuard } from '@common';
 import { UseGuards } from '@nestjs/common';
 
 @Resolver(() => User)
-export class UsersResolver {
+export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(() => [User])

@@ -31,6 +31,7 @@ type User {
   firstName: String!
   id: ID!
   lastOnlineAt: DateTime
+  middleName: String
   myBooking: [String!]
   myRoles: [String!]
   myToken: String

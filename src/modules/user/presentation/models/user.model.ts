@@ -7,6 +7,7 @@ export class User implements Pick<
   | 'id'
   | 'firstName'
   | 'secondName'
+  | 'middleName'
   | 'email'
   | 'phoneNumber'
   | 'createdAt'
@@ -20,6 +21,8 @@ export class User implements Pick<
   firstName!: string;
 
   secondName!: string;
+
+  middleName!: string | null;
 
   email!: string;
 
