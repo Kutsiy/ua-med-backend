@@ -12,6 +12,15 @@ input AuthLoginInput {
   password: String!
 }
 
+input AuthSignUpInput {
+  email: String!
+  firstName: String!
+  middleName: String
+  password: String!
+  phoneNumber: String!
+  secondName: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -21,7 +30,7 @@ type Mutation {
   createUser(UserCreateInput: UserCreateInput!): User!
   deleteUser(id: String!): String!
   login(authLoginInput: AuthLoginInput!): Auth!
-  signUp: Auth!
+  signUp(authSignUpInput: AuthSignUpInput!): Auth!
   updateUserByEmail(UserUpdateInput: UserUpdateInput!, email: String!): User!
 }
 

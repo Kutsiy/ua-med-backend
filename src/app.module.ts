@@ -9,7 +9,7 @@ import { AuthModule } from '@modules/auth/auth.module';
 import { UsersModule } from '@modules/user/user.module';
 import { APP_FILTER } from '@nestjs/core';
 import { GlobalHttpExceptionFilter } from '@common/filters';
-import { FastifyRequest } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import { JwtAuthGuard } from '@common';
 
 @Module({
@@ -62,8 +62,9 @@ import { JwtAuthGuard } from '@common';
       autoSchemaFile: join(process.cwd(), 'src/common/generated/graphql/schema.gql'),
       sortSchema: true,
       playground: true,
-      context: ({ request }: { request: FastifyRequest }) => ({
+      context: ({ request, response }: { request: FastifyRequest; response: FastifyReply }) => ({
         req: request,
+        res: response,
       }),
     }),
     AuthModule,
