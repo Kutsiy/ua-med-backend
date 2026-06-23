@@ -8,7 +8,7 @@ assignees: Kutsiy
 ---
 
 ## Goal
-Коротко описать цель задачи.
+Briefly describe the objective of the task
 
 ## Tasks
 - [ ] 
