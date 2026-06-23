@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "pri:generate": "npx prisma generate",
-    "Pri:migrate:dev": "npx dotenv-cli -e .env.development -- npx prisma migrate dev"
+    "pri:migrate:dev": "npx dotenv-cli -e .env.development -- npx prisma migrate dev"
   },
   "dependencies": {
     "@apollo/server": "^5.5.1",

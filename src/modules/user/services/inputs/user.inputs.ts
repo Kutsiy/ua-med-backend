@@ -4,6 +4,7 @@ export interface IUserCreateInput {
   middleName: string | null;
   email: string;
   phoneNumber: string;
+  password: string;
 }
 
 export interface IUserUpdateInput {

@@ -6,9 +6,10 @@ import { PassportModule } from '@nestjs/passport';
 import { JWT_STRATEGY } from '@modules/auth/domain';
 import { JwtStrategy } from '@modules/auth/infrastructure';
 import { AuthService } from '@modules/auth/services';
+import { TokenModule } from '@common/services';
 
 @Module({
-  imports: [AuthResolver, PassportModule, UsersModule],
+  imports: [AuthResolver, PassportModule, UsersModule, TokenModule],
   providers: [
     {
       provide: JWT_STRATEGY,

@@ -24,6 +24,8 @@ export class User implements Pick<
 
   middleName!: string | null;
 
+  birthDate: Date | null = null;
+
   email!: string;
 
   phoneNumber!: string;

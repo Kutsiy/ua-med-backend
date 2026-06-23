@@ -20,6 +20,7 @@ describe('UserResolver', () => {
           firstName: 'test',
           secondName: 'test',
           middleName: 'test',
+          birthDate: null,
           email: 'test@email.com',
           phoneNumber: '',
           createdAt: new Date(),

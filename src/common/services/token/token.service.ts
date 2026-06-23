@@ -2,7 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt';
 
-type Payload<T = string | number> = Record<string, T>;
+export type AccessTokenPayload = {
+  sub: string;
+  email: string;
+  role?: string;
+};
+export type RefreshTokenPayload = {
+  sub: string;
+  tokenId: string;
+};
 type SignOptions = Omit<JwtSignOptions, 'secret' | 'expiresIn'>;
 type VerifyOptions = Omit<JwtVerifyOptions, 'secret'>;
 
@@ -13,7 +21,7 @@ export class TokenService {
     private readonly configService: ConfigService,
   ) {}
 
-  async signAccessTokenAsync(payload: Payload, options?: SignOptions) {
+  async signAccessTokenAsync(payload: AccessTokenPayload, options?: SignOptions) {
     return await this.jwtService.signAsync(payload, {
       secret: this.configService.getOrThrow('ACCESS_SECRET'),
       expiresIn: this.configService.getOrThrow('ACCESS_EXPIRES'),
@@ -21,7 +29,7 @@ export class TokenService {
     });
   }
 
-  async signRefreshTokenAsync(payload: Payload, options?: SignOptions) {
+  async signRefreshTokenAsync(payload: RefreshTokenPayload, options?: SignOptions) {
     return await this.jwtService.signAsync(payload, {
       secret: this.configService.getOrThrow('REFRESH_SECRET'),
       expiresIn: this.configService.getOrThrow('REFRESH_EXPIRES'),
@@ -30,8 +38,8 @@ export class TokenService {
   }
 
   async signTokensAsync(
-    accessPayload: Payload,
-    refreshPayload: Payload,
+    accessPayload: AccessTokenPayload,
+    refreshPayload: RefreshTokenPayload,
     accessOptions?: SignOptions,
     refreshOptions?: SignOptions,
   ) {

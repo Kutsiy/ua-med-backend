@@ -5,6 +5,7 @@ type UserProps = {
   middleName: string | null;
   email: string;
   phoneNumber: string;
+  password: string;
   createdAt: Date;
   deletedAt: Date | null;
   bannedAt: Date | null;
@@ -19,8 +20,10 @@ export class UserEntity {
     private _firstName: string,
     private _secondName: string,
     private _middleName: string | null,
+    private readonly _birthDate: Date | null,
     private readonly _email: string,
     private readonly _phoneNumber: string,
+    private readonly _password: string,
     private readonly _createdAt: Date,
     private readonly _deletedAt: Date | null,
     private readonly _bannedAt: Date | null,
@@ -41,12 +44,21 @@ export class UserEntity {
     return this._middleName;
   }
 
+  get birthDate(): Date | null {
+    return this._birthDate;
+  }
+
   get email(): string {
     return this._email;
   }
   get phoneNumber(): string {
     return this._phoneNumber;
   }
+
+  get password(): string {
+    return this._password;
+  }
+
   get createdAt(): Date {
     return this._createdAt;
   }
@@ -92,14 +104,17 @@ export class UserEntity {
     middleName,
     email,
     phoneNumber,
+    password,
   }: Omit<UserProps, 'id' | 'createdAt' | 'deletedAt' | 'bannedAt' | 'lastOnlineAt'>) {
     return new UserEntity(
       crypto.randomUUID(),
       firstName,
       secondName,
       middleName,
+      null,
       email,
       phoneNumber,
+      password,
       new Date(),
       null,
       null,
