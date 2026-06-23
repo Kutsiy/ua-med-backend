@@ -1,6 +1,6 @@
 import { IUserCreateInput, IUserUpdateInput } from '@modules/user/services';
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, IsPhoneNumber, IsStrongPassword } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsPhoneNumber } from 'class-validator';
 
 @InputType()
 export class UserCreateInput implements IUserCreateInput {
@@ -26,7 +26,6 @@ export class UserCreateInput implements IUserCreateInput {
   phoneNumber!: string;
 
   @IsNotEmpty()
-  @IsStrongPassword()
   @Field()
   password!: string;
 }

@@ -27,9 +27,9 @@ describe('UserResolver', () => {
           deletedAt: null,
           bannedAt: null,
           lastOnlineAt: null,
-          myRoles: null,
-          myBooking: null,
-          myToken: null,
+          // myRoles: null,
+          // myBooking: null,
+          // myToken: null,
         },
       ];
 

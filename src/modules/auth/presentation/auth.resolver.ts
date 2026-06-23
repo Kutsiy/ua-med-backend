@@ -1,14 +1,24 @@
-import { Resolver, Mutation } from '@nestjs/graphql';
-import { User } from '@modules/user';
+import { Resolver, Mutation, Args } from '@nestjs/graphql';
+import { AuthLoginInput } from '@modules/auth/presentation';
+import { AuthService } from '@modules/auth/services';
+import { Auth } from '@modules/auth/presentation';
 
-@Resolver(() => User)
+@Resolver(() => Auth)
 export class AuthResolver {
-  @Mutation(() => User)
-  async login() {}
-  @Mutation(() => User)
+  constructor(private readonly authService: AuthService) {}
+
+  @Mutation(() => Auth)
+  async login(
+    @Args('authLoginInput', { type: () => AuthLoginInput }) authLoginInput: AuthLoginInput,
+  ) {
+    return await this.authService.login(authLoginInput);
+  }
+
+  @Mutation(() => Auth)
   async signUp() {}
-  @Mutation(() => User)
-  async logOut() {}
-  @Mutation(() => User)
-  async refresh() {}
+
+  // @Mutation(() => Auth)
+  // async logOut() {}
+  // @Mutation(() => Auth)
+  // async refresh() {}
 }

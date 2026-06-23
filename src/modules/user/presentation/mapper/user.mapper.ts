@@ -15,9 +15,9 @@ export class UserMapper {
       deletedAt: user.deletedAt,
       bannedAt: user.bannedAt,
       lastOnlineAt: user.lastOnlineAt,
-      myRoles: null,
-      myBooking: null,
-      myToken: null,
+      //   myRoles: null,
+      //   myBooking: null,
+      //   myToken: null,
     };
   }
 }

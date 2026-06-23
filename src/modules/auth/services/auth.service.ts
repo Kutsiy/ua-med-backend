@@ -1,7 +1,7 @@
 import { UserService } from '@modules/user/services';
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { IAuthLoginInput } from '@modules/auth/services';
+import { IAuthLoginInput, IAuthSignUpInput } from '@modules/auth/services';
 import { TokenService } from '@common/services';
 
 @Injectable()
@@ -52,6 +52,34 @@ export class AuthService {
       { sub: user.id, tokenId: 'tokenId' },
     );
 
-    return tokens;
+    return {
+      tokens,
+      user,
+    };
+  }
+
+  async signUp(signUpInput: IAuthSignUpInput) {
+    const userValidate = await this.validateUserByEmail(signUpInput.email);
+    if (userValidate) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const hashedPassword = await this.hashPassword(signUpInput.password);
+
+    const user = await this.userService.createUser({ ...signUpInput, password: hashedPassword });
+
+    const tokens = await this.tokenService.signTokensAsync(
+      {
+        sub: user.id,
+        email: user.email,
+        role: 'role',
+      },
+      { sub: user.id, tokenId: 'tokenId' },
+    );
+
+    return {
+      tokens,
+      user,
+    };
   }
 }

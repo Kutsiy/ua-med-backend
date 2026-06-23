@@ -28,6 +28,9 @@ export class UserEntity {
     private readonly _deletedAt: Date | null,
     private readonly _bannedAt: Date | null,
     private readonly _lastOnlineAt: Date | null,
+    // private readonly _myRoles: null,
+    // private readonly _myBooking: null,
+    // private readonly _myToken: null,
   ) {}
 
   get id(): string {
@@ -71,6 +74,18 @@ export class UserEntity {
   get lastOnlineAt(): Date | null {
     return this._lastOnlineAt;
   }
+
+  // get myRoles() {
+  //   return this._myRoles;
+  // }
+
+  // get myBooking() {
+  //   return this._myBooking;
+  // }
+
+  // get myToken() {
+  //   return this._myToken;
+  // }
 
   private set firstName(firstName: string) {
     this._firstName = firstName;

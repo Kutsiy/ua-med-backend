@@ -9,8 +9,9 @@ import { AuthService } from '@modules/auth/services';
 import { TokenModule } from '@common/services';
 
 @Module({
-  imports: [AuthResolver, PassportModule, UsersModule, TokenModule],
+  imports: [PassportModule, UsersModule, TokenModule],
   providers: [
+    AuthResolver,
     {
       provide: JWT_STRATEGY,
       useClass: JwtStrategy,
