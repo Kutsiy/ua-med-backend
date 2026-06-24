@@ -62,10 +62,12 @@ import { JwtAuthGuard } from '@common';
       autoSchemaFile: join(process.cwd(), 'src/common/generated/graphql/schema.gql'),
       sortSchema: true,
       playground: true,
-      context: ({ request, response }: { request: FastifyRequest; response: FastifyReply }) => ({
-        req: request,
-        res: response,
-      }),
+      context: (req: FastifyRequest, reply: FastifyReply) => {
+        return {
+          req,
+          res: reply,
+        };
+      },
     }),
     AuthModule,
     UsersModule,

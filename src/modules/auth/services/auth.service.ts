@@ -37,6 +37,8 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
+    if (!user.password) throw new UnauthorizedException();
+
     const compare = await this.comparePasswords(loginInput.password, user.password);
 
     if (!compare) {

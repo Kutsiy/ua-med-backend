@@ -4,8 +4,8 @@ type UserProps = {
   secondName: string;
   middleName: string | null;
   email: string;
-  phoneNumber: string;
-  password: string;
+  phoneNumber: string | null;
+  password: string | null;
   createdAt: Date;
   deletedAt: Date | null;
   bannedAt: Date | null;
@@ -22,8 +22,8 @@ export class UserEntity {
     private _middleName: string | null,
     private readonly _birthDate: Date | null,
     private readonly _email: string,
-    private readonly _phoneNumber: string,
-    private readonly _password: string,
+    private readonly _phoneNumber: string | null,
+    private readonly _password: string | null,
     private readonly _createdAt: Date,
     private readonly _deletedAt: Date | null,
     private readonly _bannedAt: Date | null,
@@ -54,11 +54,11 @@ export class UserEntity {
   get email(): string {
     return this._email;
   }
-  get phoneNumber(): string {
+  get phoneNumber() {
     return this._phoneNumber;
   }
 
-  get password(): string {
+  get password() {
     return this._password;
   }
 

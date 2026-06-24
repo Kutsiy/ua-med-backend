@@ -1,22 +1,22 @@
 import { Module } from '@nestjs/common';
-import { AuthResolver } from '@modules/auth/presentation';
+import { AuthResolver, AuthController } from '@modules/auth/presentation';
 import { UsersModule } from '@modules/user';
 import { PassportModule } from '@nestjs/passport';
-
-import { JWT_STRATEGY } from '@modules/auth/domain';
-import { JwtStrategy } from '@modules/auth/infrastructure';
+import { JwtStrategy, OAuthStrategy } from '@modules/auth/infrastructure';
 import { AuthService } from '@modules/auth/services';
-import { TokenModule } from '@common/services';
+import { PrismaModule, TokenModule } from '@common/services';
+import { ConfigModule } from '@nestjs/config';
+import googleOauthConfig from '@common/config/google-oauth.config';
 
 @Module({
-  imports: [PassportModule, UsersModule, TokenModule],
-  providers: [
-    AuthResolver,
-    {
-      provide: JWT_STRATEGY,
-      useClass: JwtStrategy,
-    },
-    AuthService,
+  imports: [
+    PassportModule,
+    UsersModule,
+    TokenModule,
+    ConfigModule.forFeature(googleOauthConfig),
+    PrismaModule,
   ],
+  controllers: [AuthController],
+  providers: [AuthResolver, JwtStrategy, AuthService, OAuthStrategy],
 })
 export class AuthModule {}

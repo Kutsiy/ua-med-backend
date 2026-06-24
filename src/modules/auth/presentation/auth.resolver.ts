@@ -14,28 +14,36 @@ export class AuthResolver {
     response.setCookie('refresh_token', tokens.refresh_token);
   }
 
+  private clearTokens(response: FastifyReply) {
+    response.clearCookie('access_token');
+    response.clearCookie('refresh_token');
+  }
+
   @Mutation(() => Auth)
   async login(
     @Args('authLoginInput', { type: () => AuthLoginInput }) authLoginInput: AuthLoginInput,
-    @Context('res') response: FastifyReply,
+    @Context() context: { res: FastifyReply },
   ) {
-    const res = await this.authService.login(authLoginInput);
-    this.setTokens(res.tokens, response);
-    return res;
+    const response = await this.authService.login(authLoginInput);
+    this.setTokens(response.tokens, context.res);
+    return response;
   }
 
   @Mutation(() => Auth)
   async signUp(
     @Args('authSignUpInput', { type: () => AuthSignUpInput }) authSignUpInput: AuthSignUpInput,
-    @Context('res') response: FastifyReply,
+    @Context() context: { res: FastifyReply },
   ) {
-    const res = await this.authService.signUp(authSignUpInput);
-    this.setTokens(res.tokens, response);
-    return res;
+    const response = await this.authService.signUp(authSignUpInput);
+    this.setTokens(response.tokens, context.res);
+    return response;
   }
 
-  // @Mutation(() => Auth)
-  // async logOut() {}
+  @Mutation(() => Auth)
+  logOut(@Context() context: { res: FastifyReply }) {
+    this.clearTokens(context.res);
+  }
+
   // @Mutation(() => Auth)
   // async refresh() {}
 }

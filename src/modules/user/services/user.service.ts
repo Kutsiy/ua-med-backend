@@ -17,7 +17,7 @@ export class UserService {
   }
 
   async getUserByEmail(email: string) {
-    const user = await this.userRepository.getUserById(email);
+    const user = await this.userRepository.getUserByEmail(email);
     return user ? UserMapper.toOutput(user) : null;
   }
 

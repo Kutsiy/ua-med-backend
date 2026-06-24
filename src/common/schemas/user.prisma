@@ -5,13 +5,15 @@ model User {
   middleName    String?
   birthDate     DateTime?
   email         String    @unique
-  phoneNumber   String    @unique
-  password      String
+  phoneNumber   String?   @unique
+  password      String?
   createdAt     DateTime  @default(now())
   deletedAt     DateTime? 
   bannedAt      DateTime?
   lastOnlineAt  DateTime?
   refreshTokens RefreshToken[]
+
+  accounts OAuthAccount[]
 
   @@map("user")
 }

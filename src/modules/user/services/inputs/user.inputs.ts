@@ -3,8 +3,8 @@ export interface IUserCreateInput {
   secondName: string;
   middleName: string | null;
   email: string;
-  phoneNumber: string;
-  password: string;
+  phoneNumber: string | null;
+  password: string | null;
 }
 
 export interface IUserUpdateInput {

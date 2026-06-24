@@ -1,1 +1,2 @@
-export * from './strategies';
+export * from './entities';
+export * from './repositories';

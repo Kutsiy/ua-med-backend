@@ -29,6 +29,7 @@ scalar DateTime
 type Mutation {
   createUser(UserCreateInput: UserCreateInput!): User!
   deleteUser(id: String!): String!
+  logOut: Auth!
   login(authLoginInput: AuthLoginInput!): Auth!
   signUp(authSignUpInput: AuthSignUpInput!): Auth!
   updateUserByEmail(UserUpdateInput: UserUpdateInput!, email: String!): User!
