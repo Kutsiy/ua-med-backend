@@ -28,7 +28,7 @@ export class User implements Pick<
 
   email!: string;
 
-  phoneNumber!: string;
+  phoneNumber!: string | null;
 
   createdAt: Date = new Date();
 

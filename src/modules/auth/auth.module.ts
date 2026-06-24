@@ -2,11 +2,12 @@ import { Module } from '@nestjs/common';
 import { AuthResolver, AuthController } from '@modules/auth/presentation';
 import { UsersModule } from '@modules/user';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy, OAuthStrategy } from '@modules/auth/infrastructure';
-import { AuthService } from '@modules/auth/services';
+import { JwtStrategy, OAuthAccountRepository, OAuthStrategy } from '@modules/auth/infrastructure';
+import { AuthService, OAuthService } from '@modules/auth/services';
 import { PrismaModule, TokenModule } from '@common/services';
 import { ConfigModule } from '@nestjs/config';
 import googleOauthConfig from '@common/config/google-oauth.config';
+import { OAUTH_ACCOUNT_REPO } from '@modules/auth/domain';
 
 @Module({
   imports: [
@@ -17,6 +18,13 @@ import googleOauthConfig from '@common/config/google-oauth.config';
     PrismaModule,
   ],
   controllers: [AuthController],
-  providers: [AuthResolver, JwtStrategy, AuthService, OAuthStrategy],
+  providers: [
+    AuthResolver,
+    JwtStrategy,
+    AuthService,
+    OAuthStrategy,
+    { provide: OAUTH_ACCOUNT_REPO, useClass: OAuthAccountRepository },
+    OAuthService,
+  ],
 })
 export class AuthModule {}

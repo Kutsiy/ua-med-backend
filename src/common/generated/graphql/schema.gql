@@ -56,7 +56,7 @@ type User {
   id: ID!
   lastOnlineAt: DateTime
   middleName: String
-  phoneNumber: String!
+  phoneNumber: String
   secondName: String!
 }
 
