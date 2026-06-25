@@ -14,6 +14,11 @@ async function bootstrap() {
     secret: process.env.SECRET,
   });
 
+  app.enableCors({
+    origin: process.env.ORIGIN_URL,
+    credentials: true,
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Backend')
     .setDescription('Backend api documentation')

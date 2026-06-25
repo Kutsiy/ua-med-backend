@@ -3,7 +3,7 @@ import { AuthResolver, AuthController } from '@modules/auth/presentation';
 import { UsersModule } from '@modules/user';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy, OAuthAccountRepository, OAuthStrategy } from '@modules/auth/infrastructure';
-import { AuthService, OAuthService } from '@modules/auth/services';
+import { AuthCookieService, AuthService, OAuthService } from '@modules/auth/services';
 import { PrismaModule, TokenModule } from '@common/services';
 import { ConfigModule } from '@nestjs/config';
 import googleOauthConfig from '@common/config/google-oauth.config';
@@ -23,6 +23,7 @@ import { OAUTH_ACCOUNT_REPO } from '@modules/auth/domain';
     JwtStrategy,
     AuthService,
     OAuthStrategy,
+    AuthCookieService,
     { provide: OAUTH_ACCOUNT_REPO, useClass: OAuthAccountRepository },
     OAuthService,
   ],
