@@ -2,7 +2,7 @@ import { Resolver, Mutation, Args, Context } from '@nestjs/graphql';
 import { AuthLoginInput, AuthSignUpInput } from '@modules/auth/presentation';
 import { AuthCookieService, AuthService } from '@modules/auth/services';
 import { Auth } from '@modules/auth/presentation';
-import { type FastifyReply } from 'fastify';
+import { FastifyRequest, type FastifyReply } from 'fastify';
 
 @Resolver(() => Auth)
 export class AuthResolver {
@@ -32,7 +32,10 @@ export class AuthResolver {
   }
 
   @Mutation(() => Auth)
-  logOut(@Context() context: { res: FastifyReply }) {
+  async logOut(
+    @Context() context: { req: FastifyRequest & { user: { id: string } }; res: FastifyReply },
+  ) {
+    await this.authService.logOut({ userId: context.req.user.id });
     this.authCookieService.clearTokens(context.res);
   }
 

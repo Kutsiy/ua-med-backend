@@ -1,8 +1,9 @@
 import { UserService } from '@modules/user/services';
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { IAuthLoginInput, IAuthSignUpInput } from '@modules/auth/services';
 import { TokenService } from '@common/services';
+import { AuthRefreshTokenService } from './auth-refresh-token.service';
+import { IAuthLoginInput, IAuthLogOutInput, IAuthSignUpInput } from './inputs';
 
 @Injectable()
 export class AuthService {
@@ -11,6 +12,7 @@ export class AuthService {
   constructor(
     private readonly tokenService: TokenService,
     private readonly userService: UserService,
+    private readonly authRefreshTokenService: AuthRefreshTokenService,
   ) {}
 
   private async hashPassword(password: string) {
@@ -54,6 +56,11 @@ export class AuthService {
       { sub: user.id, tokenId: 'tokenId' },
     );
 
+    await this.authRefreshTokenService.addToken({
+      token: tokens.refresh_token,
+      userId: user.id,
+    });
+
     return {
       tokens,
       user,
@@ -79,9 +86,18 @@ export class AuthService {
       { sub: user.id, tokenId: 'tokenId' },
     );
 
+    await this.authRefreshTokenService.addToken({
+      token: tokens.refresh_token,
+      userId: user.id,
+    });
+
     return {
       tokens,
       user,
     };
+  }
+
+  async logOut(logOutInput: IAuthLogOutInput) {
+    await this.authRefreshTokenService.closeUserTokens(logOutInput.userId);
   }
 }

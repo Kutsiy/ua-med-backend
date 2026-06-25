@@ -11,3 +11,7 @@ export interface IAuthSignUpInput {
   password: string;
   phoneNumber: string;
 }
+
+export interface IAuthLogOutInput {
+  userId: string;
+}

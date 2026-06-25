@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IOAuthAccountRepository, OAuthAccountEntity } from '@modules/auth/domain';
 import { PrismaService } from '@common/services';
-import { AccountMapper } from '../mapper';
+import { AccountMapper } from '../mappers';
 
 @Injectable()
 export class OAuthAccountRepository implements IOAuthAccountRepository {

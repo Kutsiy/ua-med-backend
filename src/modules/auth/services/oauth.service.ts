@@ -1,6 +1,7 @@
 import { UserService } from '@modules/user/services';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { IGoogleOAuthInput } from '@modules/auth/services';
+import { IGoogleOAuthInput } from './inputs';
+import { AuthRefreshTokenService } from './auth-refresh-token.service';
 import {
   OAUTH_ACCOUNT_REPO,
   OAuthAccountEntity,
@@ -14,6 +15,7 @@ export class OAuthService {
     private readonly userService: UserService,
     @Inject(OAUTH_ACCOUNT_REPO) private readonly oAuthAccountRepository: IOAuthAccountRepository,
     private readonly tokenService: TokenService,
+    private readonly authRefreshTokenService: AuthRefreshTokenService,
   ) {}
 
   async checkOrCreateGoogleUser(googleOauthInput: IGoogleOAuthInput) {
@@ -50,6 +52,11 @@ export class OAuthService {
       },
       { sub: user?.id, tokenId: 'tokenId' },
     );
+
+    await this.authRefreshTokenService.addToken({
+      token: tokens.refresh_token,
+      userId: user.id,
+    });
 
     return {
       tokens,
