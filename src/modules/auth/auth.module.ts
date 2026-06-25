@@ -14,7 +14,7 @@ import {
   AuthService,
   OAuthService,
 } from '@modules/auth/services';
-import { PrismaModule, TokenModule } from '@common/services';
+import { PrismaModule, TokenModule, MailModule } from '@common/services';
 import { ConfigModule } from '@nestjs/config';
 import googleOauthConfig from '@common/config/google-oauth.config';
 import { OAUTH_ACCOUNT_REPO, REFRESH_TOKEN_REPO } from '@modules/auth/domain';
@@ -26,6 +26,7 @@ import { OAUTH_ACCOUNT_REPO, REFRESH_TOKEN_REPO } from '@modules/auth/domain';
     TokenModule,
     ConfigModule.forFeature(googleOauthConfig),
     PrismaModule,
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [
