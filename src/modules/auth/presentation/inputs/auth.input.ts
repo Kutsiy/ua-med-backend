@@ -34,3 +34,10 @@ export class AuthSignUpInput implements IAuthSignUpInput {
   @Field()
   phoneNumber!: string;
 }
+
+@InputType()
+export class ForgotPasswordInput {
+  @IsEmail()
+  @Field()
+  email!: string;
+}

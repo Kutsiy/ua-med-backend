@@ -1,8 +1,7 @@
-import { RefreshTokenModel } from '@common/generated/prisma/models';
 import { RefreshTokenEntity } from '@modules/auth/domain';
 
 export class RefreshTokenMapper {
-  toOutput(refreshTokenEntity: RefreshTokenEntity): RefreshTokenModel {
+  toOutput(refreshTokenEntity: RefreshTokenEntity) {
     return {
       id: refreshTokenEntity.id,
       token: refreshTokenEntity.token,

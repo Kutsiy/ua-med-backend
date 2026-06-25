@@ -3,6 +3,8 @@ import { AuthLoginInput, AuthSignUpInput } from '@modules/auth/presentation';
 import { AuthCookieService, AuthService } from '@modules/auth/services';
 import { Auth } from '@modules/auth/presentation';
 import { FastifyRequest, type FastifyReply } from 'fastify';
+import { UnauthorizedException, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '@common';
 
 @Resolver(() => Auth)
 export class AuthResolver {
@@ -31,14 +33,30 @@ export class AuthResolver {
     return response;
   }
 
-  @Mutation(() => Auth)
+  @Mutation(() => Boolean)
   async logOut(
     @Context() context: { req: FastifyRequest & { user: { id: string } }; res: FastifyReply },
   ) {
     await this.authService.logOut({ userId: context.req.user.id });
     this.authCookieService.clearTokens(context.res);
+    return true;
   }
 
-  // @Mutation(() => Auth)
-  // async refresh() {}
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Auth)
+  async refresh(
+    @Context() context: { req: FastifyRequest & { user: { id: string } }; res: FastifyReply },
+  ) {
+    if (!context.res.cookies['refresh_tokens']) throw new UnauthorizedException();
+    const response = await this.authService.refreshTokens({
+      refresh_token: context.res.cookies['refresh_tokens'],
+      user: context.req.user,
+    });
+    return response;
+  }
+
+  // @Mutation(() => Boolean)
+  // async forgotPassword() {
+  //   return true;
+  // }
 }

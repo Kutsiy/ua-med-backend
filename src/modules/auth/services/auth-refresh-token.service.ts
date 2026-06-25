@@ -35,4 +35,8 @@ export class AuthRefreshTokenService {
   async closeUserTokens(userId: string) {
     await this.refreshTokenRepo.expireAllByUserId(userId);
   }
+
+  async closeTokenByToken(token: string) {
+    await this.refreshTokenRepo.expireByToken(this.hashToken(token));
+  }
 }

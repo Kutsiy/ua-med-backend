@@ -15,3 +15,10 @@ export interface IAuthSignUpInput {
 export interface IAuthLogOutInput {
   userId: string;
 }
+
+export interface IAuthRefreshTokensInput {
+  refresh_token: string;
+  user: {
+    id: string;
+  };
+}

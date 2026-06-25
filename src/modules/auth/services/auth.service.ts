@@ -3,7 +3,12 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import * as bcrypt from 'bcrypt';
 import { TokenService } from '@common/services';
 import { AuthRefreshTokenService } from './auth-refresh-token.service';
-import { IAuthLoginInput, IAuthLogOutInput, IAuthSignUpInput } from './inputs';
+import {
+  IAuthLoginInput,
+  IAuthLogOutInput,
+  IAuthSignUpInput,
+  IAuthRefreshTokensInput,
+} from './inputs';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +26,23 @@ export class AuthService {
 
   private async comparePasswords(password: string, hashedPassword: string) {
     return await bcrypt.compare(password, hashedPassword);
+  }
+
+  private async genAndAddToken(user: { id: string; email: string }) {
+    const tokens = await this.tokenService.signTokensAsync(
+      {
+        sub: user.id,
+        email: user.email,
+        role: 'role',
+      },
+      { sub: user.id, tokenId: 'tokenId' },
+    );
+
+    await this.authRefreshTokenService.addToken({
+      token: tokens.refresh_token,
+      userId: user.id,
+    });
+    return tokens;
   }
 
   async validateUserByEmail(email: string) {
@@ -47,19 +69,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const tokens = await this.tokenService.signTokensAsync(
-      {
-        sub: user.id,
-        email: user.email,
-        role: 'role',
-      },
-      { sub: user.id, tokenId: 'tokenId' },
-    );
-
-    await this.authRefreshTokenService.addToken({
-      token: tokens.refresh_token,
-      userId: user.id,
-    });
+    const tokens = await this.genAndAddToken(user);
 
     return {
       tokens,
@@ -77,19 +87,7 @@ export class AuthService {
 
     const user = await this.userService.createUser({ ...signUpInput, password: hashedPassword });
 
-    const tokens = await this.tokenService.signTokensAsync(
-      {
-        sub: user.id,
-        email: user.email,
-        role: 'role',
-      },
-      { sub: user.id, tokenId: 'tokenId' },
-    );
-
-    await this.authRefreshTokenService.addToken({
-      token: tokens.refresh_token,
-      userId: user.id,
-    });
+    const tokens = await this.genAndAddToken(user);
 
     return {
       tokens,
@@ -99,5 +97,16 @@ export class AuthService {
 
   async logOut(logOutInput: IAuthLogOutInput) {
     await this.authRefreshTokenService.closeUserTokens(logOutInput.userId);
+  }
+
+  async refreshTokens(refreshTokenInput: IAuthRefreshTokensInput) {
+    await this.authRefreshTokenService.closeTokenByToken(refreshTokenInput.refresh_token);
+    const user = await this.userService.getUserById(refreshTokenInput.user.id);
+    if (!user) throw new UnauthorizedException();
+    const tokens = await this.genAndAddToken(user);
+    return {
+      tokens,
+      user,
+    };
   }
 }
