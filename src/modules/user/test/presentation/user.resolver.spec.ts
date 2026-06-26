@@ -27,6 +27,8 @@ describe('UserResolver', () => {
           deletedAt: null,
           bannedAt: null,
           lastOnlineAt: null,
+          isActive: false,
+          activationLink: 'test-link',
           // myRoles: null,
           // myBooking: null,
           // myToken: null,

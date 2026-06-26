@@ -14,6 +14,8 @@ export class User implements Pick<
   | 'deletedAt'
   | 'bannedAt'
   | 'lastOnlineAt'
+  | 'isActive'
+  | 'activationLink'
 > {
   @Field(() => ID)
   id!: string;
@@ -37,6 +39,10 @@ export class User implements Pick<
   bannedAt: Date | null = null;
 
   lastOnlineAt: Date | null = null;
+
+  isActive!: boolean;
+
+  activationLink!: string | null;
 
   // myRoles: string[] | null = null;
 

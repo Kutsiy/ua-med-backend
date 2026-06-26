@@ -1,7 +1,8 @@
 import { UserEntity } from '@modules/user/domain';
+import { type ClassFields } from '@utils';
 
 export class UserMapper {
-  static toOutput(user: UserEntity) {
+  static toOutput(user: UserEntity): ClassFields<UserEntity> {
     return {
       id: user.id,
       firstName: user.firstName,
@@ -11,10 +12,14 @@ export class UserMapper {
       email: user.email,
       phoneNumber: user.phoneNumber,
       password: user.password,
+      passLink: user.passLink,
+      passLinkExpAt: user.passLinkExpAt,
       createdAt: user.createdAt,
       deletedAt: user.deletedAt,
       bannedAt: user.bannedAt,
       lastOnlineAt: user.lastOnlineAt,
+      activationLink: user.activationLink,
+      isActive: user.isActive,
     };
   }
 }

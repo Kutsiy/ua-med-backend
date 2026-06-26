@@ -3,7 +3,7 @@ import { Field, InputType } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty, IsPhoneNumber } from 'class-validator';
 
 @InputType()
-export class UserCreateInput implements IUserCreateInput {
+export class UserCreateInput implements Omit<IUserCreateInput, 'activationLink'> {
   @IsNotEmpty()
   @Field()
   firstName!: string;

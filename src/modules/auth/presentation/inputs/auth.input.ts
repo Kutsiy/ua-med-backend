@@ -1,4 +1,4 @@
-import { IAuthLoginInput, IAuthSignUpInput } from '@modules/auth/services';
+import { IAuthAddPassword, IAuthLoginInput, IAuthSignUpInput } from '@modules/auth/services';
 import { InputType, Field } from '@nestjs/graphql';
 import { IsEmail, IsPhoneNumber } from 'class-validator';
 
@@ -36,8 +36,20 @@ export class AuthSignUpInput implements IAuthSignUpInput {
 }
 
 @InputType()
+export class AuthAddPassword implements Omit<IAuthAddPassword, 'email'> {
+  @Field()
+  newPassword!: string;
+
+  @Field(() => String, { nullable: true })
+  oldPassword!: string | null;
+}
+
 export class ForgotPasswordInput {
   @IsEmail()
-  @Field()
   email!: string;
+}
+
+export class ChangePasswordInput {
+  newPass!: string;
+  passLink!: string;
 }

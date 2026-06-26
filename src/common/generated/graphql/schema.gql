@@ -7,6 +7,11 @@ type Auth {
   user: User!
 }
 
+input AuthAddPassword {
+  newPassword: String!
+  oldPassword: String
+}
+
 input AuthLoginInput {
   email: String!
   password: String!
@@ -27,6 +32,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Mutation {
+  addPassword(authAddPasswordInput: AuthAddPassword!): Boolean!
   createUser(UserCreateInput: UserCreateInput!): User!
   deleteUser(id: String!): String!
   logOut: Boolean!
@@ -48,6 +54,7 @@ type Token {
 }
 
 type User {
+  activationLink: String
   bannedAt: DateTime
   birthDate: DateTime
   createdAt: DateTime!
@@ -55,6 +62,7 @@ type User {
   email: String!
   firstName: String!
   id: ID!
+  isActive: Boolean!
   lastOnlineAt: DateTime
   middleName: String
   phoneNumber: String

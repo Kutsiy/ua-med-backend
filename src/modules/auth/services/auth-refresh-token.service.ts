@@ -24,7 +24,8 @@ export class AuthRefreshTokenService {
       RefreshTokenEntity.create({
         ...createTokenInput,
         expiresAt: new Date(
-          new Date().getDay() + this.configService.getOrThrow<number>('REFRESH_EXPIRES_NUM'),
+          Date.now() +
+            this.configService.getOrThrow<number>('REFRESH_EXPIRES_NUM') * 24 * 60 * 60 * 1000,
         ),
         token: this.hashToken(createTokenInput.token),
       }),

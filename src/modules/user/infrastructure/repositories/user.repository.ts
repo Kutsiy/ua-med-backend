@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { IUserRepository, UserEntity } from '@modules/user/domain';
+import { IUserRepository, UserEntity, UserWhere } from '@modules/user/domain';
 import { UserMapper } from '@modules/user/infrastructure';
 import { PrismaService } from '@common/services';
 
@@ -9,6 +9,12 @@ export class UserRepository implements IUserRepository {
 
   constructor(private readonly prismaService: PrismaService) {}
 
+  async getUserWhere(userWhere: UserWhere): Promise<UserEntity | null> {
+    const user = await this.prismaService.user.findFirst({
+      where: userWhere,
+    });
+    return user ? UserMapper.toDomain(user) : null;
+  }
   async getAllUsers(): Promise<UserEntity[]> {
     const users = await this.prismaService.user.findMany();
 
@@ -20,6 +26,16 @@ export class UserRepository implements IUserRepository {
 
     const user = await this.prismaService.user.findUnique({
       where: { id },
+    });
+
+    return user ? UserMapper.toDomain(user) : null;
+  }
+
+  async getUserByActivationLink(activationLink: string) {
+    this.logger.log(`Get user by activationLink = ${activationLink}`);
+
+    const user = await this.prismaService.user.findUnique({
+      where: { activationLink },
     });
 
     return user ? UserMapper.toDomain(user) : null;

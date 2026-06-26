@@ -12,6 +12,12 @@ export interface IAuthSignUpInput {
   phoneNumber: string;
 }
 
+export interface IAuthAddPassword {
+  email: string;
+  newPassword: string;
+  oldPassword?: string | null;
+}
+
 export interface IAuthLogOutInput {
   userId: string;
 }

@@ -1,8 +1,7 @@
-import { UserModel } from '@common/generated/prisma/models';
 import { User } from '@modules/user/presentation';
 
 export class UserMapper {
-  static toOutput(user: UserModel): User {
+  static toOutput(user: User): User {
     return {
       id: user.id,
       firstName: user.firstName,
@@ -15,6 +14,8 @@ export class UserMapper {
       deletedAt: user.deletedAt,
       bannedAt: user.bannedAt,
       lastOnlineAt: user.lastOnlineAt,
+      activationLink: user.activationLink,
+      isActive: user.isActive,
       //   myRoles: null,
       //   myBooking: null,
       //   myToken: null,

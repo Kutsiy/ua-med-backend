@@ -1,5 +1,5 @@
 import { Resolver, Mutation, Args, Context } from '@nestjs/graphql';
-import { AuthLoginInput, AuthSignUpInput } from '@modules/auth/presentation';
+import { AuthAddPassword, AuthLoginInput, AuthSignUpInput } from '@modules/auth/presentation';
 import { AuthCookieService, AuthService } from '@modules/auth/services';
 import { Auth } from '@modules/auth/presentation';
 import { FastifyRequest, type FastifyReply } from 'fastify';
@@ -33,6 +33,7 @@ export class AuthResolver {
     return response;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => Boolean)
   async logOut(
     @Context() context: { req: FastifyRequest & { user: { id: string } }; res: FastifyReply },
@@ -47,16 +48,27 @@ export class AuthResolver {
   async refresh(
     @Context() context: { req: FastifyRequest & { user: { id: string } }; res: FastifyReply },
   ) {
-    if (!context.res.cookies['refresh_tokens']) throw new UnauthorizedException();
+    if (!context.req.cookies?.refresh_token) throw new UnauthorizedException();
     const response = await this.authService.refreshTokens({
-      refresh_token: context.res.cookies['refresh_tokens'],
+      refresh_token: context.req.cookies?.refresh_token,
       user: context.req.user,
     });
+    this.authCookieService.setTokens(response.tokens, context.res);
     return response;
   }
 
-  // @Mutation(() => Boolean)
-  // async forgotPassword() {
-  //   return true;
-  // }
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Boolean)
+  async addPassword(
+    @Args('authAddPasswordInput', { type: () => AuthAddPassword })
+    authAddPasswordInput: AuthAddPassword,
+    @Context() context: { req: FastifyRequest & { user: { email: string } } },
+  ) {
+    await this.authService.addPassword({
+      email: context.req.user.email,
+      newPassword: authAddPasswordInput.newPassword,
+      oldPassword: authAddPasswordInput.oldPassword,
+    });
+    return true;
+  }
 }

@@ -7,7 +7,7 @@ import {
   OAuthAccountEntity,
   type IOAuthAccountRepository,
 } from '@modules/auth/domain';
-import { TokenService } from '@common/services';
+import { MailService, TokenService } from '@common/services';
 
 @Injectable()
 export class OAuthService {
@@ -16,6 +16,7 @@ export class OAuthService {
     @Inject(OAUTH_ACCOUNT_REPO) private readonly oAuthAccountRepository: IOAuthAccountRepository,
     private readonly tokenService: TokenService,
     private readonly authRefreshTokenService: AuthRefreshTokenService,
+    private readonly mailService: MailService,
   ) {}
 
   async checkOrCreateGoogleUser(googleOauthInput: IGoogleOAuthInput) {
@@ -26,6 +27,7 @@ export class OAuthService {
         password: null,
         phoneNumber: null,
         middleName: null,
+        activationLink: crypto.randomUUID(),
       });
       await this.oAuthAccountRepository.createAccount(
         OAuthAccountEntity.create({
@@ -57,6 +59,14 @@ export class OAuthService {
       token: tokens.refresh_token,
       userId: user.id,
     });
+
+    if (user.activationLink && !user.isActive) {
+      await this.mailService.sendActivationEmail({
+        email: user.email,
+        userName: user.firstName,
+        link: user.activationLink,
+      });
+    }
 
     return {
       tokens,

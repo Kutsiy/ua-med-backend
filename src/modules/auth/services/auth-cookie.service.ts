@@ -20,11 +20,11 @@ export class AuthCookieService {
 
     res.setCookie('access_token', access_token, {
       ...cookieConfig,
-      maxAge: this.configService.getOrThrow('ACCESS_EXPIRES_NUM') * 60,
+      maxAge: Number(this.configService.getOrThrow('ACCESS_EXPIRES_NUM')) * 60,
     });
     res.setCookie('refresh_token', refresh_token, {
       ...cookieConfig,
-      maxAge: this.configService.getOrThrow('REFRESH_EXPIRES_NUM') * 60 * 60 * 24,
+      maxAge: Number(this.configService.getOrThrow('REFRESH_EXPIRES_NUM')) * 60 * 60 * 24,
     });
   }
 
