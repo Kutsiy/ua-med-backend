@@ -7,12 +7,15 @@ export class User implements Pick<
   | 'id'
   | 'firstName'
   | 'secondName'
+  | 'middleName'
   | 'email'
   | 'phoneNumber'
   | 'createdAt'
   | 'deletedAt'
   | 'bannedAt'
   | 'lastOnlineAt'
+  | 'isActive'
+  | 'activationLink'
 > {
   @Field(() => ID)
   id!: string;
@@ -21,9 +24,13 @@ export class User implements Pick<
 
   secondName!: string;
 
+  middleName!: string | null;
+
+  birthDate: Date | null = null;
+
   email!: string;
 
-  phoneNumber!: string;
+  phoneNumber!: string | null;
 
   createdAt: Date = new Date();
 
@@ -33,9 +40,13 @@ export class User implements Pick<
 
   lastOnlineAt: Date | null = null;
 
-  myRoles: string[] | null = null;
+  isActive!: boolean;
 
-  myBooking: string[] | null = null;
+  activationLink!: string | null;
 
-  myToken: string | null = null;
+  // myRoles: string[] | null = null;
+
+  // myBooking: string[] | null = null;
+
+  // myToken: string | null = null;
 }

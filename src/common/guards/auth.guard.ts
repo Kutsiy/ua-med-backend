@@ -1,6 +1,6 @@
 // import { AuthenticationError } from '@nestjs/apollo';
 import { Injectable, ExecutionContext, Logger } from '@nestjs/common';
-import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
+// import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
 import { FastifyRequest } from 'fastify';
@@ -9,11 +9,15 @@ import { FastifyRequest } from 'fastify';
 export class JwtAuthGuard extends AuthGuard('jwt') {
   protected readonly logger = new Logger(JwtAuthGuard.name);
 
-  canActivate(context: ExecutionContext) {
+  // canActivate(context: ExecutionContext) {
+  //   const ctx = GqlExecutionContext.create(context);
+  //   const { req } = ctx.getContext<{ req: FastifyRequest }>();
+  //   return super.canActivate(new ExecutionContextHost([req]));
+  // }
+
+  getRequest(context: ExecutionContext): FastifyRequest {
     const ctx = GqlExecutionContext.create(context);
-    const { req } = ctx.getContext<{ req: FastifyRequest }>();
-    console.log(req);
-    return super.canActivate(new ExecutionContextHost([req]));
+    return ctx.getContext<{ req: FastifyRequest }>().req;
   }
 
   //   handleRequest(err: Error, user: any): any {

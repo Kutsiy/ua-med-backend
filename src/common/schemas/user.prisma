@@ -1,16 +1,25 @@
 model User {
-  id           String      @id @unique
-  firstName    String
-  secondName   String
-  middleName String?
-  birthDate   DateTime?
-  email        String   @unique
-  phoneNumber  String   @unique
-  createdAt    DateTime @default(now())
-  deletedAt    DateTime? 
-  bannedAt     DateTime?
-  lastOnlineAt DateTime?
-  refreshTokens RefreshToken[]
+  id             String    @id @unique
+  firstName      String
+  secondName     String
+  middleName     String?
+  birthDate      DateTime?
+  email          String    @unique
+  phoneNumber    String?   @unique
+
+  password       String?
+  passLink       String?   @unique
+  passLinkExpAt  DateTime? 
+
+  createdAt      DateTime  @default(now())
+  deletedAt      DateTime? 
+  bannedAt       DateTime?
+  lastOnlineAt   DateTime?
+  isActive       Boolean
+  activationLink String? @unique @default(uuid())
+
+  accounts OAuthAccount[]
+  refreshTokens  RefreshToken[]
 
   @@map("user")
 }

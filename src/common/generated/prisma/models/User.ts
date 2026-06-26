@@ -32,10 +32,15 @@ export type UserMinAggregateOutputType = {
   birthDate: Date | null
   email: string | null
   phoneNumber: string | null
+  password: string | null
+  passLink: string | null
+  passLinkExpAt: Date | null
   createdAt: Date | null
   deletedAt: Date | null
   bannedAt: Date | null
   lastOnlineAt: Date | null
+  isActive: boolean | null
+  activationLink: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -46,10 +51,15 @@ export type UserMaxAggregateOutputType = {
   birthDate: Date | null
   email: string | null
   phoneNumber: string | null
+  password: string | null
+  passLink: string | null
+  passLinkExpAt: Date | null
   createdAt: Date | null
   deletedAt: Date | null
   bannedAt: Date | null
   lastOnlineAt: Date | null
+  isActive: boolean | null
+  activationLink: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -60,10 +70,15 @@ export type UserCountAggregateOutputType = {
   birthDate: number
   email: number
   phoneNumber: number
+  password: number
+  passLink: number
+  passLinkExpAt: number
   createdAt: number
   deletedAt: number
   bannedAt: number
   lastOnlineAt: number
+  isActive: number
+  activationLink: number
   _all: number
 }
 
@@ -76,10 +91,15 @@ export type UserMinAggregateInputType = {
   birthDate?: true
   email?: true
   phoneNumber?: true
+  password?: true
+  passLink?: true
+  passLinkExpAt?: true
   createdAt?: true
   deletedAt?: true
   bannedAt?: true
   lastOnlineAt?: true
+  isActive?: true
+  activationLink?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -90,10 +110,15 @@ export type UserMaxAggregateInputType = {
   birthDate?: true
   email?: true
   phoneNumber?: true
+  password?: true
+  passLink?: true
+  passLinkExpAt?: true
   createdAt?: true
   deletedAt?: true
   bannedAt?: true
   lastOnlineAt?: true
+  isActive?: true
+  activationLink?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -104,10 +129,15 @@ export type UserCountAggregateInputType = {
   birthDate?: true
   email?: true
   phoneNumber?: true
+  password?: true
+  passLink?: true
+  passLinkExpAt?: true
   createdAt?: true
   deletedAt?: true
   bannedAt?: true
   lastOnlineAt?: true
+  isActive?: true
+  activationLink?: true
   _all?: true
 }
 
@@ -190,11 +220,16 @@ export type UserGroupByOutputType = {
   middleName: string | null
   birthDate: Date | null
   email: string
-  phoneNumber: string
+  phoneNumber: string | null
+  password: string | null
+  passLink: string | null
+  passLinkExpAt: Date | null
   createdAt: Date
   deletedAt: Date | null
   bannedAt: Date | null
   lastOnlineAt: Date | null
+  isActive: boolean
+  activationLink: string | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -225,11 +260,17 @@ export type UserWhereInput = {
   middleName?: Prisma.StringNullableFilter<"User"> | string | null
   birthDate?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   email?: Prisma.StringFilter<"User"> | string
-  phoneNumber?: Prisma.StringFilter<"User"> | string
+  phoneNumber?: Prisma.StringNullableFilter<"User"> | string | null
+  password?: Prisma.StringNullableFilter<"User"> | string | null
+  passLink?: Prisma.StringNullableFilter<"User"> | string | null
+  passLinkExpAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   bannedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   lastOnlineAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  isActive?: Prisma.BoolFilter<"User"> | boolean
+  activationLink?: Prisma.StringNullableFilter<"User"> | string | null
+  accounts?: Prisma.OAuthAccountListRelationFilter
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
 }
 
@@ -240,11 +281,17 @@ export type UserOrderByWithRelationInput = {
   middleName?: Prisma.SortOrderInput | Prisma.SortOrder
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
-  phoneNumber?: Prisma.SortOrder
+  phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
+  passLink?: Prisma.SortOrderInput | Prisma.SortOrder
+  passLinkExpAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   bannedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastOnlineAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  activationLink?: Prisma.SortOrderInput | Prisma.SortOrder
+  accounts?: Prisma.OAuthAccountOrderByRelationAggregateInput
   refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
 }
 
@@ -252,6 +299,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
   phoneNumber?: string
+  passLink?: string
+  activationLink?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
@@ -259,12 +308,16 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   secondName?: Prisma.StringFilter<"User"> | string
   middleName?: Prisma.StringNullableFilter<"User"> | string | null
   birthDate?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  password?: Prisma.StringNullableFilter<"User"> | string | null
+  passLinkExpAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   bannedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   lastOnlineAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  isActive?: Prisma.BoolFilter<"User"> | boolean
+  accounts?: Prisma.OAuthAccountListRelationFilter
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
-}, "id" | "id" | "email" | "phoneNumber">
+}, "id" | "id" | "email" | "phoneNumber" | "passLink" | "activationLink">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -273,11 +326,16 @@ export type UserOrderByWithAggregationInput = {
   middleName?: Prisma.SortOrderInput | Prisma.SortOrder
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
-  phoneNumber?: Prisma.SortOrder
+  phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
+  passLink?: Prisma.SortOrderInput | Prisma.SortOrder
+  passLinkExpAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   bannedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastOnlineAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  activationLink?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -293,11 +351,16 @@ export type UserScalarWhereWithAggregatesInput = {
   middleName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   birthDate?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
-  phoneNumber?: Prisma.StringWithAggregatesFilter<"User"> | string
+  phoneNumber?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  password?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  passLink?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  passLinkExpAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   bannedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   lastOnlineAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  activationLink?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
 }
 
 export type UserCreateInput = {
@@ -307,11 +370,17 @@ export type UserCreateInput = {
   middleName?: string | null
   birthDate?: Date | string | null
   email: string
-  phoneNumber: string
+  phoneNumber?: string | null
+  password?: string | null
+  passLink?: string | null
+  passLinkExpAt?: Date | string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   bannedAt?: Date | string | null
   lastOnlineAt?: Date | string | null
+  isActive: boolean
+  activationLink?: string | null
+  accounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
 }
 
@@ -322,11 +391,17 @@ export type UserUncheckedCreateInput = {
   middleName?: string | null
   birthDate?: Date | string | null
   email: string
-  phoneNumber: string
+  phoneNumber?: string | null
+  password?: string | null
+  passLink?: string | null
+  passLinkExpAt?: Date | string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   bannedAt?: Date | string | null
   lastOnlineAt?: Date | string | null
+  isActive: boolean
+  activationLink?: string | null
+  accounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -337,11 +412,17 @@ export type UserUpdateInput = {
   middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLinkExpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOnlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activationLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
 }
 
@@ -352,11 +433,17 @@ export type UserUncheckedUpdateInput = {
   middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLinkExpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOnlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activationLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -367,11 +454,16 @@ export type UserCreateManyInput = {
   middleName?: string | null
   birthDate?: Date | string | null
   email: string
-  phoneNumber: string
+  phoneNumber?: string | null
+  password?: string | null
+  passLink?: string | null
+  passLinkExpAt?: Date | string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   bannedAt?: Date | string | null
   lastOnlineAt?: Date | string | null
+  isActive: boolean
+  activationLink?: string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -381,11 +473,16 @@ export type UserUpdateManyMutationInput = {
   middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLinkExpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOnlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activationLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -395,11 +492,16 @@ export type UserUncheckedUpdateManyInput = {
   middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLinkExpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOnlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activationLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserScalarRelationFilter = {
@@ -415,10 +517,15 @@ export type UserCountOrderByAggregateInput = {
   birthDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  passLink?: Prisma.SortOrder
+  passLinkExpAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   bannedAt?: Prisma.SortOrder
   lastOnlineAt?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  activationLink?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -429,10 +536,15 @@ export type UserMaxOrderByAggregateInput = {
   birthDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  passLink?: Prisma.SortOrder
+  passLinkExpAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   bannedAt?: Prisma.SortOrder
   lastOnlineAt?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  activationLink?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -443,10 +555,15 @@ export type UserMinOrderByAggregateInput = {
   birthDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  passLink?: Prisma.SortOrder
+  passLinkExpAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   bannedAt?: Prisma.SortOrder
   lastOnlineAt?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  activationLink?: Prisma.SortOrder
 }
 
 export type UserCreateNestedOneWithoutRefreshTokensInput = {
@@ -463,6 +580,20 @@ export type UserUpdateOneRequiredWithoutRefreshTokensNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRefreshTokensInput, Prisma.UserUpdateWithoutRefreshTokensInput>, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
 }
 
+export type UserCreateNestedOneWithoutAccountsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountsInput
+  upsert?: Prisma.UserUpsertWithoutAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountsInput, Prisma.UserUpdateWithoutAccountsInput>, Prisma.UserUncheckedUpdateWithoutAccountsInput>
+}
+
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
@@ -474,11 +605,17 @@ export type UserCreateWithoutRefreshTokensInput = {
   middleName?: string | null
   birthDate?: Date | string | null
   email: string
-  phoneNumber: string
+  phoneNumber?: string | null
+  password?: string | null
+  passLink?: string | null
+  passLinkExpAt?: Date | string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   bannedAt?: Date | string | null
   lastOnlineAt?: Date | string | null
+  isActive: boolean
+  activationLink?: string | null
+  accounts?: Prisma.OAuthAccountCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -488,11 +625,17 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   middleName?: string | null
   birthDate?: Date | string | null
   email: string
-  phoneNumber: string
+  phoneNumber?: string | null
+  password?: string | null
+  passLink?: string | null
+  passLinkExpAt?: Date | string | null
   createdAt?: Date | string
   deletedAt?: Date | string | null
   bannedAt?: Date | string | null
   lastOnlineAt?: Date | string | null
+  isActive: boolean
+  activationLink?: string | null
+  accounts?: Prisma.OAuthAccountUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -518,11 +661,17 @@ export type UserUpdateWithoutRefreshTokensInput = {
   middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLinkExpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOnlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activationLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accounts?: Prisma.OAuthAccountUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -532,11 +681,113 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLinkExpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOnlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activationLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accounts?: Prisma.OAuthAccountUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutAccountsInput = {
+  id: string
+  firstName: string
+  secondName: string
+  middleName?: string | null
+  birthDate?: Date | string | null
+  email: string
+  phoneNumber?: string | null
+  password?: string | null
+  passLink?: string | null
+  passLinkExpAt?: Date | string | null
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  bannedAt?: Date | string | null
+  lastOnlineAt?: Date | string | null
+  isActive: boolean
+  activationLink?: string | null
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAccountsInput = {
+  id: string
+  firstName: string
+  secondName: string
+  middleName?: string | null
+  birthDate?: Date | string | null
+  email: string
+  phoneNumber?: string | null
+  password?: string | null
+  passLink?: string | null
+  passLinkExpAt?: Date | string | null
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  bannedAt?: Date | string | null
+  lastOnlineAt?: Date | string | null
+  isActive: boolean
+  activationLink?: string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAccountsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
+}
+
+export type UserUpsertWithoutAccountsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAccountsInput, Prisma.UserUncheckedUpdateWithoutAccountsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAccountsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAccountsInput, Prisma.UserUncheckedUpdateWithoutAccountsInput>
+}
+
+export type UserUpdateWithoutAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  secondName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLinkExpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastOnlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activationLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  secondName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passLinkExpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastOnlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  activationLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -545,10 +796,12 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
  */
 
 export type UserCountOutputType = {
+  accounts: number
   refreshTokens: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
 }
 
@@ -560,6 +813,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OAuthAccountWhereInput
 }
 
 /**
@@ -578,10 +838,16 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
+  password?: boolean
+  passLink?: boolean
+  passLinkExpAt?: boolean
   createdAt?: boolean
   deletedAt?: boolean
   bannedAt?: boolean
   lastOnlineAt?: boolean
+  isActive?: boolean
+  activationLink?: boolean
+  accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -594,10 +860,15 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
+  password?: boolean
+  passLink?: boolean
+  passLinkExpAt?: boolean
   createdAt?: boolean
   deletedAt?: boolean
   bannedAt?: boolean
   lastOnlineAt?: boolean
+  isActive?: boolean
+  activationLink?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -608,10 +879,15 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
+  password?: boolean
+  passLink?: boolean
+  passLinkExpAt?: boolean
   createdAt?: boolean
   deletedAt?: boolean
   bannedAt?: boolean
   lastOnlineAt?: boolean
+  isActive?: boolean
+  activationLink?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -622,14 +898,20 @@ export type UserSelectScalar = {
   birthDate?: boolean
   email?: boolean
   phoneNumber?: boolean
+  password?: boolean
+  passLink?: boolean
+  passLinkExpAt?: boolean
   createdAt?: boolean
   deletedAt?: boolean
   bannedAt?: boolean
   lastOnlineAt?: boolean
+  isActive?: boolean
+  activationLink?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "secondName" | "middleName" | "birthDate" | "email" | "phoneNumber" | "createdAt" | "deletedAt" | "bannedAt" | "lastOnlineAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "secondName" | "middleName" | "birthDate" | "email" | "phoneNumber" | "password" | "passLink" | "passLinkExpAt" | "createdAt" | "deletedAt" | "bannedAt" | "lastOnlineAt" | "isActive" | "activationLink", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -639,6 +921,7 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    accounts: Prisma.$OAuthAccountPayload<ExtArgs>[]
     refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -648,11 +931,16 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     middleName: string | null
     birthDate: Date | null
     email: string
-    phoneNumber: string
+    phoneNumber: string | null
+    password: string | null
+    passLink: string | null
+    passLinkExpAt: Date | null
     createdAt: Date
     deletedAt: Date | null
     bannedAt: Date | null
     lastOnlineAt: Date | null
+    isActive: boolean
+    activationLink: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1047,6 +1335,7 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OAuthAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   refreshTokens<T extends Prisma.User$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1084,10 +1373,15 @@ export interface UserFieldRefs {
   readonly birthDate: Prisma.FieldRef<"User", 'DateTime'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly phoneNumber: Prisma.FieldRef<"User", 'String'>
+  readonly password: Prisma.FieldRef<"User", 'String'>
+  readonly passLink: Prisma.FieldRef<"User", 'String'>
+  readonly passLinkExpAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly bannedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly lastOnlineAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
+  readonly activationLink: Prisma.FieldRef<"User", 'String'>
 }
     
 
@@ -1478,6 +1772,30 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.accounts
+ */
+export type User$accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OAuthAccount
+   */
+  select?: Prisma.OAuthAccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OAuthAccount
+   */
+  omit?: Prisma.OAuthAccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OAuthAccountInclude<ExtArgs> | null
+  where?: Prisma.OAuthAccountWhereInput
+  orderBy?: Prisma.OAuthAccountOrderByWithRelationInput | Prisma.OAuthAccountOrderByWithRelationInput[]
+  cursor?: Prisma.OAuthAccountWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OAuthAccountScalarFieldEnum | Prisma.OAuthAccountScalarFieldEnum[]
 }
 
 /**

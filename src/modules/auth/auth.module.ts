@@ -1,28 +1,47 @@
 import { Module } from '@nestjs/common';
-import { AuthResolver } from '@modules/auth/presentation';
+import { AuthResolver, AuthController } from '@modules/auth/presentation';
 import { UsersModule } from '@modules/user';
 import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
-import { JWT_STRATEGY } from '@modules/auth/domain';
-import { JwtStrategy } from '@modules/auth/infrastructure';
-import { AuthService } from '@modules/auth/services';
+import {
+  JwtStrategy,
+  OAuthAccountRepository,
+  OAuthStrategy,
+  RefreshTokenRepository,
+} from '@modules/auth/infrastructure';
+import {
+  AuthOtherService,
+  AuthCookieService,
+  AuthRefreshTokenService,
+  AuthService,
+  OAuthService,
+} from '@modules/auth/services';
+import { PrismaModule, TokenModule, MailModule, HashModule } from '@common/services';
+import { ConfigModule } from '@nestjs/config';
+import googleOauthConfig from '@common/config/google-oauth.config';
+import { OAUTH_ACCOUNT_REPO, REFRESH_TOKEN_REPO } from '@modules/auth/domain';
 
 @Module({
   imports: [
-    AuthResolver,
     PassportModule,
     UsersModule,
-    JwtModule.register({
-      secret: 'Secret',
-      signOptions: { expiresIn: '60s' },
-    }),
+    TokenModule,
+    ConfigModule.forFeature(googleOauthConfig),
+    PrismaModule,
+    MailModule,
+    HashModule,
   ],
+  controllers: [AuthController],
   providers: [
-    {
-      provide: JWT_STRATEGY,
-      useClass: JwtStrategy,
-    },
+    AuthResolver,
+    JwtStrategy,
     AuthService,
+    OAuthStrategy,
+    AuthCookieService,
+    AuthRefreshTokenService,
+    AuthOtherService,
+    { provide: REFRESH_TOKEN_REPO, useClass: RefreshTokenRepository },
+    { provide: OAUTH_ACCOUNT_REPO, useClass: OAuthAccountRepository },
+    OAuthService,
   ],
 })
 export class AuthModule {}

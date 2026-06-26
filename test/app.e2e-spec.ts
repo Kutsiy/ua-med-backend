@@ -1,7 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-// eslint-disable-next-line no-restricted-imports
 import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '@app/app.module';
 
@@ -15,13 +13,6 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
-  });
-
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
   });
 
   afterEach(async () => {

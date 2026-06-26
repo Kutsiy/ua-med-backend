@@ -23,6 +23,11 @@ export * from './enums.ts';
  */
 export type RefreshToken = Prisma.RefreshTokenModel
 /**
+ * Model OAuthAccount
+ * 
+ */
+export type OAuthAccount = Prisma.OAuthAccountModel
+/**
  * Model Permission
  * 
  */

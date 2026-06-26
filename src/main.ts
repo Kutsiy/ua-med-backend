@@ -3,11 +3,21 @@ import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
+import fastifyCookie from '@fastify/cookie';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
 
   app.useLogger(app.get(Logger));
+
+  await app.register(fastifyCookie, {
+    secret: process.env.SECRET,
+  });
+
+  app.enableCors({
+    origin: process.env.ORIGIN_URL,
+    credentials: true,
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Backend')

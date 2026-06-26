@@ -9,6 +9,8 @@ import { AuthModule } from '@modules/auth/auth.module';
 import { UsersModule } from '@modules/user/user.module';
 import { APP_FILTER } from '@nestjs/core';
 import { GlobalHttpExceptionFilter } from '@common/filters';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { JwtAuthGuard } from '@common';
 
 @Module({
   imports: [
@@ -60,6 +62,12 @@ import { GlobalHttpExceptionFilter } from '@common/filters';
       autoSchemaFile: join(process.cwd(), 'src/common/generated/graphql/schema.gql'),
       sortSchema: true,
       playground: true,
+      context: (req: FastifyRequest, reply: FastifyReply) => {
+        return {
+          req,
+          res: reply,
+        };
+      },
     }),
     AuthModule,
     UsersModule,
@@ -69,6 +77,7 @@ import { GlobalHttpExceptionFilter } from '@common/filters';
       provide: APP_FILTER,
       useClass: GlobalHttpExceptionFilter,
     },
+    JwtAuthGuard,
   ],
 })
 export class AppModule {}
