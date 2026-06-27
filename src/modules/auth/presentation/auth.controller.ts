@@ -22,7 +22,6 @@ export class AuthController {
 
   @Post('password/forgot')
   async forgotPassword(@Body() forgotPasswordInput: ForgotPasswordInput) {
-    console.log(1);
     await this.authOtherService.forgotPassword(forgotPasswordInput.email);
     return {
       success: true,

@@ -12,6 +12,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
+    ConfigModule,
   ],
   providers: [TokenService],
   exports: [TokenService],

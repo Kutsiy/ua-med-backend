@@ -1,36 +1,28 @@
-// import { AuthenticationError } from '@nestjs/apollo';
-import { Injectable, ExecutionContext, Logger } from '@nestjs/common';
-// import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
+import { Injectable, ExecutionContext, Logger, UnauthorizedException } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
 import { FastifyRequest } from 'fastify';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  protected readonly logger = new Logger(JwtAuthGuard.name);
-
-  // canActivate(context: ExecutionContext) {
-  //   const ctx = GqlExecutionContext.create(context);
-  //   const { req } = ctx.getContext<{ req: FastifyRequest }>();
-  //   return super.canActivate(new ExecutionContextHost([req]));
-  // }
+  private readonly logger = new Logger(JwtAuthGuard.name);
 
   getRequest(context: ExecutionContext): FastifyRequest {
     const ctx = GqlExecutionContext.create(context);
     return ctx.getContext<{ req: FastifyRequest }>().req;
   }
 
-  //   handleRequest(err: Error, user: any): any {
-  //     if (err) {
-  //       this.logger.error(`Auth Error! ${err?.message}`);
-  //       throw err;
-  //     }
+  handleRequest<TUser>(err: Error | null, user: TUser): TUser {
+    if (err) {
+      this.logger.warn('JWT authentication failed', err.message);
+      throw err;
+    }
 
-  //     if (!user) {
-  //       this.logger.error('Auth Error! User not found');
-  //       throw new AuthenticationError('Auth Error! User not found');
-  //     }
+    if (!user) {
+      this.logger.warn('JWT authentication failed: user not found in request');
+      throw new UnauthorizedException();
+    }
 
-  //     return user;
-  //   }
+    return user;
+  }
 }

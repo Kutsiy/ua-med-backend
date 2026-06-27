@@ -177,15 +177,15 @@ export class UserEntity {
       this.middleName = middleName;
     }
 
-    if (activationLink) {
+    if (activationLink !== undefined) {
       this.activationLink = activationLink;
     }
 
-    if (isActive) {
+    if (isActive !== undefined) {
       this.isActive = isActive;
     }
     this.password = password !== undefined ? password : this.password;
-    this.passLink = this.passLink = passLink !== undefined ? passLink : this.passLink;
+    this.passLink = passLink !== undefined ? passLink : this.passLink;
     this.passLinkExpAt = passLinkExpAt !== undefined ? passLinkExpAt : this.passLinkExpAt;
   }
 

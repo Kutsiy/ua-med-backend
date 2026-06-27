@@ -1,13 +1,15 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { type IUserRepository, USER_REPO, UserEntity, UserWhere } from '@modules/user/domain';
 import { UserMapper, IUserCreateInput, IUserUpdateInput } from '@modules/user/services';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
+
   constructor(@Inject(USER_REPO) private readonly userRepository: IUserRepository) {}
 
   async getUserWhere(userWhere: UserWhere) {
-    return await this.userRepository.getUserWhere(userWhere);
+    return this.userRepository.getUserWhere(userWhere);
   }
 
   async getAllUsers() {
@@ -32,40 +34,56 @@ export class UserService {
       passLinkExpAt: null,
     });
     const user = await this.userRepository.createUser(userEntity);
+    this.logger.log(`User created successfully: userId=${user.id}`);
     return UserMapper.toOutput(user);
   }
 
   async updateUserByEmail(email: string, userInput: IUserUpdateInput) {
     const user = await this.userRepository.getUserByEmail(email);
-    if (user) {
-      user.updateProfile(userInput);
-      const updatedUser = await this.userRepository.updateUserByEmail(user);
-      return UserMapper.toOutput(updatedUser);
+    if (!user) {
+      this.logger.warn(`User update failed: user not found, email=${email}`);
+      return null;
     }
-    return null;
+
+    user.updateProfile(userInput);
+    const updatedUser = await this.userRepository.updateUserByEmail(user);
+    this.logger.log(`User updated successfully: userId=${updatedUser.id}`);
+    return UserMapper.toOutput(updatedUser);
   }
 
   async deleteUser(id: string) {
+    const user = await this.userRepository.getUserById(id);
+    if (!user) {
+      this.logger.warn(`User delete failed: user not found, userId=${id}`);
+      throw new NotFoundException('User not found');
+    }
+
     await this.userRepository.deleteUser(id);
+    this.logger.log(`User deleted successfully: userId=${id}`);
   }
 
   async activateUser(activationLink: string) {
     const user = await this.userRepository.getUserByActivationLink(activationLink);
-    if (user) {
-      user.updateProfile({ activationLink: null, isActive: true });
-      const updatedUser = await this.userRepository.updateUserByEmail(user);
-      return UserMapper.toOutput(updatedUser);
+    if (!user) {
+      return null;
     }
-    return null;
+
+    user.updateProfile({ activationLink: null, isActive: true });
+    const updatedUser = await this.userRepository.updateUserByEmail(user);
+    return UserMapper.toOutput(updatedUser);
   }
 
   async genPassLinkForUserByEmail(email: string) {
     const user = await this.userRepository.getUserByEmail(email);
-    if (!user) throw new UnauthorizedException('User do not exist');
+    if (!user) {
+      return null;
+    }
+
     user.updateProfile({
       passLink: crypto.randomUUID(),
       passLinkExpAt: new Date(Date.now() + 30 * 60 * 1000),
     });
-    return await this.userRepository.updateUserByEmail(user);
+    const updatedUser = await this.userRepository.updateUserByEmail(user);
+    return UserMapper.toOutput(updatedUser);
   }
 }

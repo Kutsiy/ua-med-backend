@@ -48,7 +48,8 @@ export class AuthResolver {
   async refresh(
     @Context() context: { req: FastifyRequest & { user: { id: string } }; res: FastifyReply },
   ) {
-    if (!context.req.cookies?.refresh_token) throw new UnauthorizedException();
+    if (!context.req.cookies?.refresh_token)
+      throw new UnauthorizedException('refresh_token not found');
     const response = await this.authService.refreshTokens({
       refresh_token: context.req.cookies?.refresh_token,
       user: context.req.user,

@@ -1,7 +1,9 @@
 import { UserService } from '@modules/user/services';
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -18,6 +20,8 @@ import {
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly tokenService: TokenService,
     private readonly userService: UserService,
@@ -26,18 +30,25 @@ export class AuthService {
     private readonly hashService: HashService,
   ) {}
 
-  private async sendEmail(user: {
+  private async sendActivationEmail(user: {
+    id: string;
     email: string;
     firstName: string;
     activationLink: string | null;
     isActive: boolean;
   }) {
-    if (user.activationLink && !user.isActive) {
+    if (!user.activationLink || user.isActive) {
+      return;
+    }
+
+    try {
       await this.mailService.sendActivationEmail({
         email: user.email,
         userName: user.firstName,
         link: user.activationLink,
       });
+    } catch {
+      this.logger.warn(`Failed to send activation email: userId=${user.id}`);
     }
   }
 
@@ -59,33 +70,40 @@ export class AuthService {
   }
 
   async validateUserByEmail(email: string) {
-    const user = await this.userService.getUserByEmail(email);
-    return user;
+    return this.userService.getUserByEmail(email);
   }
 
   async validateUserById(id: string) {
-    const user = await this.userService.getUserById(id);
-    return user;
+    return this.userService.getUserById(id);
   }
 
   async login(loginInput: IAuthLoginInput) {
     const user = await this.validateUserByEmail(loginInput.email);
+
     if (!user) {
-      throw new NotFoundException('User not found');
+      this.logger.warn(`Login failed: user not found, email=${loginInput.email}`);
+      throw new UnauthorizedException('User not found');
     }
 
-    if (!user.password) throw new UnauthorizedException();
+    if (!user.password) {
+      this.logger.warn(`Login failed: user doesn\`t have password, email=${loginInput.email}`);
+      throw new UnauthorizedException('Invalid credentials');
+    }
 
-    const compare = await this.hashService.comparePasswords(loginInput.password, user.password);
+    const isPasswordValid = await this.hashService.comparePasswords(
+      loginInput.password,
+      user.password,
+    );
 
-    if (!compare) {
+    if (!isPasswordValid) {
+      this.logger.warn(`Login failed: invalid credentials, email=${loginInput.email}`);
       throw new UnauthorizedException('Invalid credentials');
     }
 
     const tokens = await this.genAndAddToken(user);
+    await this.sendActivationEmail(user);
 
-    await this.sendEmail(user);
-
+    this.logger.log(`User logged in successfully: userId=${user.id}`);
     return {
       tokens,
       user,
@@ -93,9 +111,10 @@ export class AuthService {
   }
 
   async signUp(signUpInput: IAuthSignUpInput) {
-    const userValidate = await this.validateUserByEmail(signUpInput.email);
-    if (userValidate) {
-      throw new UnauthorizedException('User not found');
+    const existingUser = await this.validateUserByEmail(signUpInput.email);
+    if (existingUser) {
+      this.logger.warn(`Sign up failed: user already exists, email=${signUpInput.email}`);
+      throw new ConflictException('User already exists');
     }
 
     const hashedPassword = await this.hashService.hashPassword(signUpInput.password);
@@ -107,8 +126,9 @@ export class AuthService {
     });
     const tokens = await this.genAndAddToken(user);
 
-    await this.sendEmail(user);
+    await this.sendActivationEmail(user);
 
+    this.logger.log(`User signed up successfully: userId=${user.id}`);
     return {
       tokens,
       user,
@@ -117,13 +137,30 @@ export class AuthService {
 
   async logOut(logOutInput: IAuthLogOutInput) {
     await this.authRefreshTokenService.closeUserTokens(logOutInput.userId);
+    this.logger.log(`User logged out successfully: userId=${logOutInput.userId}`);
   }
 
   async refreshTokens(refreshTokenInput: IAuthRefreshTokensInput) {
-    await this.authRefreshTokenService.closeTokenByToken(refreshTokenInput.refresh_token);
-    const user = await this.userService.getUserById(refreshTokenInput.user.id);
-    if (!user) throw new UnauthorizedException();
+    const { refresh_token: refreshToken, user: tokenUser } = refreshTokenInput;
+
+    await this.tokenService.verifyRefreshTokenAsync(refreshToken);
+
+    const storedToken = await this.authRefreshTokenService.findValidToken(refreshToken);
+    if (!storedToken || storedToken.userId !== tokenUser.id) {
+      this.logger.warn(`Refresh token failed: invalid or expired token, userId=${tokenUser.id}`);
+      throw new UnauthorizedException();
+    }
+
+    await this.authRefreshTokenService.closeTokenByToken(refreshToken);
+
+    const user = await this.userService.getUserById(tokenUser.id);
+    if (!user) {
+      this.logger.warn(`Refresh token failed: user not found, userId=${tokenUser.id}`);
+      throw new UnauthorizedException();
+    }
+
     const tokens = await this.genAndAddToken(user);
+    this.logger.log(`Refresh token rotated successfully: userId=${user.id}`);
     return {
       tokens,
       user,
@@ -132,31 +169,47 @@ export class AuthService {
 
   async addPassword(addPasswordInput: IAuthAddPassword) {
     const user = await this.userService.getUserByEmail(addPasswordInput.email);
-    if (!user) throw new NotFoundException();
+    if (!user) {
+      this.logger.warn(`Password change failed: user not found, email=${addPasswordInput.email}`);
+      throw new NotFoundException();
+    }
+
     const passwordHash = await this.hashService.hashPassword(addPasswordInput.newPassword);
+
     if (user.password) {
-      if (!addPasswordInput.oldPassword) throw new BadRequestException('Old password is required');
-      const compare = await this.hashService.comparePasswords(
+      if (!addPasswordInput.oldPassword) {
+        this.logger.warn(`Password change failed: old password required, userId=${user.id}`);
+        throw new BadRequestException('Old password is required');
+      }
+
+      const isOldPasswordValid = await this.hashService.comparePasswords(
         addPasswordInput.oldPassword,
         user.password,
       );
-      if (!compare) throw new BadRequestException('Something went wrong');
+      if (!isOldPasswordValid) {
+        this.logger.warn(`Password change failed: invalid credentials, userId=${user.id}`);
+        throw new BadRequestException('Invalid credentials');
+      }
 
-      const compareOldNew = await this.hashService.comparePasswords(
+      const isSamePassword = await this.hashService.comparePasswords(
         addPasswordInput.newPassword,
         user.password,
       );
-
-      if (compareOldNew)
+      if (isSamePassword) {
+        this.logger.warn(`Password change failed: new password same as current, userId=${user.id}`);
         throw new BadRequestException('New password must be different from the current password');
+      }
 
       await this.userService.updateUserByEmail(addPasswordInput.email, {
         password: passwordHash,
       });
-    } else {
-      await this.userService.updateUserByEmail(addPasswordInput.email, {
-        password: passwordHash,
-      });
+      this.logger.log(`Password changed successfully: userId=${user.id}`);
+      return;
     }
+
+    await this.userService.updateUserByEmail(addPasswordInput.email, {
+      password: passwordHash,
+    });
+    this.logger.log(`Password set successfully: userId=${user.id}`);
   }
 }

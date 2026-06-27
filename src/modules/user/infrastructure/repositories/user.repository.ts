@@ -1,20 +1,20 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { IUserRepository, UserEntity, UserWhere } from '@modules/user/domain';
 import { UserMapper } from '@modules/user/infrastructure';
 import { PrismaService } from '@common/services';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
-  private readonly logger = new Logger(UserRepository.name);
-
   constructor(private readonly prismaService: PrismaService) {}
 
   async getUserWhere(userWhere: UserWhere): Promise<UserEntity | null> {
     const user = await this.prismaService.user.findFirst({
       where: userWhere,
     });
+
     return user ? UserMapper.toDomain(user) : null;
   }
+
   async getAllUsers(): Promise<UserEntity[]> {
     const users = await this.prismaService.user.findMany();
 
@@ -22,8 +22,6 @@ export class UserRepository implements IUserRepository {
   }
 
   async getUserById(id: string): Promise<UserEntity | null> {
-    this.logger.log(`Get user by id = ${id}`);
-
     const user = await this.prismaService.user.findUnique({
       where: { id },
     });
@@ -31,9 +29,7 @@ export class UserRepository implements IUserRepository {
     return user ? UserMapper.toDomain(user) : null;
   }
 
-  async getUserByActivationLink(activationLink: string) {
-    this.logger.log(`Get user by activationLink = ${activationLink}`);
-
+  async getUserByActivationLink(activationLink: string): Promise<UserEntity | null> {
     const user = await this.prismaService.user.findUnique({
       where: { activationLink },
     });
@@ -42,8 +38,6 @@ export class UserRepository implements IUserRepository {
   }
 
   async getUserByEmail(email: string): Promise<UserEntity | null> {
-    this.logger.log(`Get user by email = ${email}`);
-
     const user = await this.prismaService.user.findUnique({
       where: { email },
     });
@@ -52,8 +46,6 @@ export class UserRepository implements IUserRepository {
   }
 
   async createUser(user: UserEntity): Promise<UserEntity> {
-    this.logger.log('Create user');
-
     const createdUser = await this.prismaService.user.create({
       data: UserMapper.toObject(user),
     });
@@ -62,8 +54,6 @@ export class UserRepository implements IUserRepository {
   }
 
   async updateUserByEmail(user: UserEntity): Promise<UserEntity> {
-    this.logger.log(`Update user by email = ${user.email}`);
-
     const updatedUser = await this.prismaService.user.update({
       where: { email: user.email },
       data: UserMapper.toUpdate(user),
@@ -73,8 +63,6 @@ export class UserRepository implements IUserRepository {
   }
 
   async deleteUser(id: string): Promise<void> {
-    this.logger.log(`Delete user by id = ${id}`);
-
     await this.prismaService.user.delete({
       where: { id },
     });

@@ -8,6 +8,7 @@ import { join } from 'path';
 @Module({
   imports: [
     MailerModule.forRootAsync({
+      imports: [ConfigModule],
       useFactory(config: ConfigService) {
         return {
           transport: {
