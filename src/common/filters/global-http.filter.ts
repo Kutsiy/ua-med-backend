@@ -39,7 +39,7 @@ export class GlobalHttpExceptionFilter implements ExceptionFilter {
       }
     }
 
-    response.status(statusCode).send({
+    response.code(statusCode).send({
       success: false,
       statusCode,
       timestamp: new Date().toISOString(),

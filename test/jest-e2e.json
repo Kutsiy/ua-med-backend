@@ -9,6 +9,8 @@
   "moduleNameMapper": {
     "^@app/utils(|/.*)$": "<rootDir>/../libs/utils/src/$1",
     "^@modules/(.*)$": "<rootDir>/src/modules/$1",
-    "^@common/(.*)$": "<rootDir>/src/common/$1"
+    "^@common/(.*)$": "<rootDir>/src/common/$1",
+    "^@common$": "<rootDir>/src/common/index.ts",
+    "^@app/(.*)$": "<rootDir>/src/$1"
   }
 }

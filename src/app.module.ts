@@ -8,13 +8,10 @@ import { join } from 'path';
 import { AuthModule } from '@modules/auth/auth.module';
 import { UsersModule } from '@modules/user/user.module';
 import { APP_FILTER } from '@nestjs/core';
-import {
-  GlobalGraphqlExceptionFilter,
-  GlobalHttpExceptionFilter,
-  PrismaGraphqlExceptionFilter,
-} from '@common/filters';
+import { GlobalGraphqlExceptionFilter, PrismaGraphqlExceptionFilter } from '@common/filters';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { JwtAuthGuard } from '@common';
+import { GraphQLFormattedError } from 'graphql';
 
 @Module({
   imports: [
@@ -59,12 +56,12 @@ import { JwtAuthGuard } from '@common';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.NODE_ENV === 'development' ? '.env.development' : '.env',
+      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
     }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
+      driver: ApolloDriver,
       useFactory() {
         return {
-          driver: ApolloDriver,
           autoSchemaFile: join(process.cwd(), 'src/common/generated/graphql/schema.gql'),
           sortSchema: true,
           playground: true,
@@ -74,9 +71,9 @@ import { JwtAuthGuard } from '@common';
               res: reply,
             };
           },
-          formatError: (error) => {
+          formatError: (error): GraphQLFormattedError => {
             const originalError = error.extensions?.originalError;
-
+            console.log(originalError);
             let message = error.message;
             let statusCode: number | undefined;
 
@@ -103,8 +100,10 @@ import { JwtAuthGuard } from '@common';
 
             return {
               message,
-              code: error.extensions?.code,
-              statusCode,
+              extensions: {
+                statusCode,
+                code: error.extensions?.code,
+              },
             };
           },
         };
@@ -121,10 +120,6 @@ import { JwtAuthGuard } from '@common';
     {
       provide: APP_FILTER,
       useClass: GlobalGraphqlExceptionFilter,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: GlobalHttpExceptionFilter,
     },
     JwtAuthGuard,
   ],
