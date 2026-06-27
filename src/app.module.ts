@@ -8,7 +8,11 @@ import { join } from 'path';
 import { AuthModule } from '@modules/auth/auth.module';
 import { UsersModule } from '@modules/user/user.module';
 import { APP_FILTER } from '@nestjs/core';
-import { GlobalHttpExceptionFilter } from '@common/filters';
+import {
+  GlobalGraphqlExceptionFilter,
+  GlobalHttpExceptionFilter,
+  PrismaGraphqlExceptionFilter,
+} from '@common/filters';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { JwtAuthGuard } from '@common';
 
@@ -57,15 +61,52 @@ import { JwtAuthGuard } from '@common';
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'development' ? '.env.development' : '.env',
     }),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/common/generated/graphql/schema.gql'),
-      sortSchema: true,
-      playground: true,
-      context: (req: FastifyRequest, reply: FastifyReply) => {
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
+      useFactory() {
         return {
-          req,
-          res: reply,
+          driver: ApolloDriver,
+          autoSchemaFile: join(process.cwd(), 'src/common/generated/graphql/schema.gql'),
+          sortSchema: true,
+          playground: true,
+          context: (req: FastifyRequest, reply: FastifyReply) => {
+            return {
+              req,
+              res: reply,
+            };
+          },
+          formatError: (error) => {
+            const originalError = error.extensions?.originalError;
+
+            let message = error.message;
+            let statusCode: number | undefined;
+
+            if (originalError && typeof originalError === 'object' && 'message' in originalError) {
+              const originalMessage = originalError.message;
+
+              if (typeof originalMessage === 'string') {
+                message = originalMessage;
+              }
+
+              if (Array.isArray(originalMessage)) {
+                message = originalMessage.join(', ');
+              }
+            }
+
+            if (
+              originalError &&
+              typeof originalError === 'object' &&
+              'statusCode' in originalError &&
+              typeof originalError.statusCode === 'number'
+            ) {
+              statusCode = originalError.statusCode;
+            }
+
+            return {
+              message,
+              code: error.extensions?.code,
+              statusCode,
+            };
+          },
         };
       },
     }),
@@ -73,6 +114,14 @@ import { JwtAuthGuard } from '@common';
     UsersModule,
   ],
   providers: [
+    {
+      provide: APP_FILTER,
+      useClass: PrismaGraphqlExceptionFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: GlobalGraphqlExceptionFilter,
+    },
     {
       provide: APP_FILTER,
       useClass: GlobalHttpExceptionFilter,

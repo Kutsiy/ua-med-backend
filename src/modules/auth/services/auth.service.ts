@@ -80,8 +80,13 @@ export class AuthService {
   async login(loginInput: IAuthLoginInput) {
     const user = await this.validateUserByEmail(loginInput.email);
 
-    if (!user?.password) {
+    if (!user) {
       this.logger.warn(`Login failed: user not found, email=${loginInput.email}`);
+      throw new UnauthorizedException('User not found');
+    }
+
+    if (!user.password) {
+      this.logger.warn(`Login failed: user doesn\`t have password, email=${loginInput.email}`);
       throw new UnauthorizedException('Invalid credentials');
     }
 

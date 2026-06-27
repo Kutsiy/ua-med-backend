@@ -3,7 +3,6 @@ import { IRefreshTokenRepository, RefreshTokenEntity } from '@modules/auth/domai
 import { PrismaService } from '@common/services';
 import { Prisma } from '@common/generated/prisma/client';
 import { RefreshTokenMapper } from '@modules/auth/infrastructure';
-import { withPrismaErrorHandling } from '@common/error-handlers';
 
 type PrismaClientOrTx = PrismaService | Prisma.TransactionClient;
 
@@ -17,70 +16,68 @@ export class RefreshTokenRepository implements IRefreshTokenRepository {
     refreshToken: RefreshTokenEntity,
     tx?: Prisma.TransactionClient,
   ): Promise<RefreshTokenEntity> {
-    return withPrismaErrorHandling(async () => {
-      const db = this.getClient(tx);
-      const refToken = await db.refreshToken.create({
-        data: RefreshTokenMapper.toCreateInput(refreshToken),
-      });
-      return RefreshTokenMapper.toDomain(refToken);
-    }, 'addRefreshToken');
+    const db = this.getClient(tx);
+
+    const refToken = await db.refreshToken.create({
+      data: RefreshTokenMapper.toCreateInput(refreshToken),
+    });
+
+    return RefreshTokenMapper.toDomain(refToken);
   }
 
   async findByToken(
     token: string,
     tx?: Prisma.TransactionClient,
   ): Promise<RefreshTokenEntity | null> {
-    return withPrismaErrorHandling(async () => {
-      const db = this.getClient(tx);
-      const refToken = await db.refreshToken.findUnique({
-        where: { token },
-      });
-      return refToken ? RefreshTokenMapper.toDomain(refToken) : null;
-    }, 'findByToken');
+    const db = this.getClient(tx);
+
+    const refToken = await db.refreshToken.findUnique({
+      where: { token },
+    });
+
+    return refToken ? RefreshTokenMapper.toDomain(refToken) : null;
   }
 
   async findById(id: string, tx?: Prisma.TransactionClient): Promise<RefreshTokenEntity | null> {
-    return withPrismaErrorHandling(async () => {
-      const db = this.getClient(tx);
-      const refToken = await db.refreshToken.findUnique({
-        where: { id },
-      });
-      return refToken ? RefreshTokenMapper.toDomain(refToken) : null;
-    }, 'findById');
+    const db = this.getClient(tx);
+
+    const refToken = await db.refreshToken.findUnique({
+      where: { id },
+    });
+
+    return refToken ? RefreshTokenMapper.toDomain(refToken) : null;
   }
 
   async expireByToken(token: string, tx?: Prisma.TransactionClient): Promise<void> {
-    await withPrismaErrorHandling(async () => {
-      const db = this.getClient(tx);
-      await db.refreshToken.updateMany({
-        where: { token, expired: false },
-        data: { expired: true },
-      });
-    }, 'expireByToken');
+    const db = this.getClient(tx);
+
+    await db.refreshToken.updateMany({
+      where: { token, expired: false },
+      data: { expired: true },
+    });
   }
 
   async expireAllByUserId(userId: string, tx?: Prisma.TransactionClient): Promise<void> {
-    await withPrismaErrorHandling(async () => {
-      const db = this.getClient(tx);
-      await db.refreshToken.updateMany({
-        where: { userId, expired: false },
-        data: { expired: true },
-      });
-    }, 'expireAllByUserId');
+    const db = this.getClient(tx);
+
+    await db.refreshToken.updateMany({
+      where: { userId, expired: false },
+      data: { expired: true },
+    });
   }
 
   async deleteExpired(tx?: Prisma.TransactionClient): Promise<void> {
-    await withPrismaErrorHandling(async () => {
-      const db = this.getClient(tx);
-      const result = await db.refreshToken.deleteMany({
-        where: {
-          OR: [{ expired: true }, { expiresAt: { lt: new Date() } }],
-        },
-      });
-      if (result.count > 0) {
-        this.logger.log(`Expired refresh tokens cleaned up: count=${result.count}`);
-      }
-    }, 'deleteExpired');
+    const db = this.getClient(tx);
+
+    const result = await db.refreshToken.deleteMany({
+      where: {
+        OR: [{ expired: true }, { expiresAt: { lt: new Date() } }],
+      },
+    });
+
+    if (result.count > 0) {
+      this.logger.log(`Expired refresh tokens cleaned up: count=${result.count}`);
+    }
   }
 
   private getClient(tx?: Prisma.TransactionClient): PrismaClientOrTx {
