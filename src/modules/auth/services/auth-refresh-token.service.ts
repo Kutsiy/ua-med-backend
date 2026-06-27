@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { IRefreshTokenCreateInput } from '@modules/auth/services';
 import {
@@ -20,7 +20,7 @@ export class AuthRefreshTokenService {
   }
 
   async addToken(createTokenInput: IRefreshTokenCreateInput) {
-    const refToken = await this.refreshTokenRepo.addRefreshToken(
+    return this.refreshTokenRepo.addRefreshToken(
       RefreshTokenEntity.create({
         ...createTokenInput,
         expiresAt: new Date(
@@ -30,7 +30,14 @@ export class AuthRefreshTokenService {
         token: this.hashToken(createTokenInput.token),
       }),
     );
-    return refToken;
+  }
+
+  async findValidToken(rawToken: string): Promise<RefreshTokenEntity | null> {
+    const storedToken = await this.refreshTokenRepo.findByToken(this.hashToken(rawToken));
+    if (!storedToken || storedToken.isExpired()) {
+      return null;
+    }
+    return storedToken;
   }
 
   async closeUserTokens(userId: string) {
@@ -38,6 +45,10 @@ export class AuthRefreshTokenService {
   }
 
   async closeTokenByToken(token: string) {
+    const storedToken = await this.findValidToken(token);
+    if (!storedToken) {
+      throw new UnauthorizedException();
+    }
     await this.refreshTokenRepo.expireByToken(this.hashToken(token));
   }
 }

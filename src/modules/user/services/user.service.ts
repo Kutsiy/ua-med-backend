@@ -1,4 +1,4 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { type IUserRepository, USER_REPO, UserEntity, UserWhere } from '@modules/user/domain';
 import { UserMapper, IUserCreateInput, IUserUpdateInput } from '@modules/user/services';
 
@@ -7,7 +7,7 @@ export class UserService {
   constructor(@Inject(USER_REPO) private readonly userRepository: IUserRepository) {}
 
   async getUserWhere(userWhere: UserWhere) {
-    return await this.userRepository.getUserWhere(userWhere);
+    return this.userRepository.getUserWhere(userWhere);
   }
 
   async getAllUsers() {
@@ -37,35 +37,46 @@ export class UserService {
 
   async updateUserByEmail(email: string, userInput: IUserUpdateInput) {
     const user = await this.userRepository.getUserByEmail(email);
-    if (user) {
-      user.updateProfile(userInput);
-      const updatedUser = await this.userRepository.updateUserByEmail(user);
-      return UserMapper.toOutput(updatedUser);
+    if (!user) {
+      return null;
     }
-    return null;
+
+    user.updateProfile(userInput);
+    const updatedUser = await this.userRepository.updateUserByEmail(user);
+    return UserMapper.toOutput(updatedUser);
   }
 
   async deleteUser(id: string) {
+    const user = await this.userRepository.getUserById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
     await this.userRepository.deleteUser(id);
   }
 
   async activateUser(activationLink: string) {
     const user = await this.userRepository.getUserByActivationLink(activationLink);
-    if (user) {
-      user.updateProfile({ activationLink: null, isActive: true });
-      const updatedUser = await this.userRepository.updateUserByEmail(user);
-      return UserMapper.toOutput(updatedUser);
+    if (!user) {
+      return null;
     }
-    return null;
+
+    user.updateProfile({ activationLink: null, isActive: true });
+    const updatedUser = await this.userRepository.updateUserByEmail(user);
+    return UserMapper.toOutput(updatedUser);
   }
 
   async genPassLinkForUserByEmail(email: string) {
     const user = await this.userRepository.getUserByEmail(email);
-    if (!user) throw new UnauthorizedException('User do not exist');
+    if (!user) {
+      return null;
+    }
+
     user.updateProfile({
       passLink: crypto.randomUUID(),
       passLinkExpAt: new Date(Date.now() + 30 * 60 * 1000),
     });
-    return await this.userRepository.updateUserByEmail(user);
+    const updatedUser = await this.userRepository.updateUserByEmail(user);
+    return UserMapper.toOutput(updatedUser);
   }
 }

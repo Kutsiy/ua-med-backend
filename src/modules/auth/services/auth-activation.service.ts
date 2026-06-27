@@ -1,9 +1,11 @@
 import { HashService, MailService } from '@common';
 import { UserService } from '@modules/user/services';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class AuthOtherService {
+  private readonly logger = new Logger(AuthOtherService.name);
+
   constructor(
     private readonly userService: UserService,
     private readonly hashService: HashService,
@@ -11,16 +13,32 @@ export class AuthOtherService {
   ) {}
 
   async activateAccountByLink(activationLink: string) {
-    await this.userService.activateUser(activationLink);
+    const user = await this.userService.activateUser(activationLink);
+    if (!user) {
+      throw new BadRequestException('Invalid or expired activation link');
+    }
+    return user;
   }
 
   async forgotPassword(email: string) {
     const user = await this.userService.genPassLinkForUserByEmail(email);
-    await this.mailService.sendChangePasswordEmail({
-      email: user.email,
-      link: user.passLink ? user.passLink : '',
-      userName: user.firstName,
-    });
+    if (!user) {
+      return;
+    }
+
+    try {
+      await this.mailService.sendChangePasswordEmail({
+        email: user.email,
+        link: user.passLink ?? '',
+        userName: user.firstName,
+      });
+    } catch (error) {
+      this.logger.error(
+        'Failed to send password reset email',
+        error instanceof Error ? error.message : 'Unknown error',
+      );
+      throw error;
+    }
   }
 
   async changePassword(newPass: string, passLink: string) {
@@ -37,8 +55,10 @@ export class AuthOtherService {
 
       throw new BadRequestException('Invalid or expired password reset link');
     }
+
+    const passwordHash = await this.hashService.hashPassword(newPass);
     await this.userService.updateUserByEmail(user.email, {
-      password: await this.hashService.hashPassword(newPass),
+      password: passwordHash,
       passLinkExpAt: null,
       passLink: null,
     });

@@ -1,5 +1,5 @@
 import googleOauthConfig from '@common/config/google-oauth.config';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { type ConfigType } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-oauth20';
@@ -27,7 +27,7 @@ export class OAuthStrategy extends PassportStrategy(Strategy) {
     const secondName = profile.name?.familyName;
 
     if (!email) {
-      throw new Error('Google profile does not contain email');
+      throw new UnauthorizedException('OAuth authentication failed');
     }
 
     const user = await this.oAuthService.checkOrCreateGoogleUser({

@@ -3,6 +3,7 @@ import { IRefreshTokenRepository, RefreshTokenEntity } from '@modules/auth/domai
 import { PrismaService } from '@common/services';
 import { Prisma } from '@common/generated/prisma/client';
 import { RefreshTokenMapper } from '@modules/auth/infrastructure';
+import { withPrismaErrorHandling } from '@common/utils';
 
 type PrismaClientOrTx = PrismaService | Prisma.TransactionClient;
 
@@ -14,64 +15,67 @@ export class RefreshTokenRepository implements IRefreshTokenRepository {
     refreshToken: RefreshTokenEntity,
     tx?: Prisma.TransactionClient,
   ): Promise<RefreshTokenEntity> {
-    const db = this.getClient(tx);
-
-    const refToken = await db.refreshToken.create({
-      data: RefreshTokenMapper.toCreateInput(refreshToken),
-    });
-
-    return RefreshTokenMapper.toDomain(refToken);
+    return withPrismaErrorHandling(async () => {
+      const db = this.getClient(tx);
+      const refToken = await db.refreshToken.create({
+        data: RefreshTokenMapper.toCreateInput(refreshToken),
+      });
+      return RefreshTokenMapper.toDomain(refToken);
+    }, 'addRefreshToken');
   }
 
   async findByToken(
     token: string,
     tx?: Prisma.TransactionClient,
   ): Promise<RefreshTokenEntity | null> {
-    const db = this.getClient(tx);
-
-    const refToken = await db.refreshToken.findUnique({
-      where: { token },
-    });
-
-    return refToken ? RefreshTokenMapper.toDomain(refToken) : null;
+    return withPrismaErrorHandling(async () => {
+      const db = this.getClient(tx);
+      const refToken = await db.refreshToken.findUnique({
+        where: { token },
+      });
+      return refToken ? RefreshTokenMapper.toDomain(refToken) : null;
+    }, 'findByToken');
   }
 
   async findById(id: string, tx?: Prisma.TransactionClient): Promise<RefreshTokenEntity | null> {
-    const db = this.getClient(tx);
-
-    const refToken = await db.refreshToken.findUnique({
-      where: { id },
-    });
-
-    return refToken ? RefreshTokenMapper.toDomain(refToken) : null;
+    return withPrismaErrorHandling(async () => {
+      const db = this.getClient(tx);
+      const refToken = await db.refreshToken.findUnique({
+        where: { id },
+      });
+      return refToken ? RefreshTokenMapper.toDomain(refToken) : null;
+    }, 'findById');
   }
 
   async expireByToken(token: string, tx?: Prisma.TransactionClient): Promise<void> {
-    const db = this.getClient(tx);
-
-    await db.refreshToken.update({
-      where: { token },
-      data: { expired: true },
-    });
+    await withPrismaErrorHandling(async () => {
+      const db = this.getClient(tx);
+      await db.refreshToken.updateMany({
+        where: { token, expired: false },
+        data: { expired: true },
+      });
+    }, 'expireByToken');
   }
 
   async expireAllByUserId(userId: string, tx?: Prisma.TransactionClient): Promise<void> {
-    const db = this.getClient(tx);
-
-    await db.refreshToken.updateMany({
-      where: { userId },
-      data: { expired: true },
-    });
+    await withPrismaErrorHandling(async () => {
+      const db = this.getClient(tx);
+      await db.refreshToken.updateMany({
+        where: { userId, expired: false },
+        data: { expired: true },
+      });
+    }, 'expireAllByUserId');
   }
 
   async deleteExpired(tx?: Prisma.TransactionClient): Promise<void> {
-    const db = this.getClient(tx);
-
-    await db.refreshToken.deleteMany({
-      where: {
-        OR: [{ expired: true }, { expiresAt: { lt: new Date() } }],
-      },
-    });
+    await withPrismaErrorHandling(async () => {
+      const db = this.getClient(tx);
+      await db.refreshToken.deleteMany({
+        where: {
+          OR: [{ expired: true }, { expiresAt: { lt: new Date() } }],
+        },
+      });
+    }, 'deleteExpired');
   }
 
   private getClient(tx?: Prisma.TransactionClient): PrismaClientOrTx {

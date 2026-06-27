@@ -1,5 +1,11 @@
 import { UserService } from '@modules/user/services';
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Inject,
+  ConflictException,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { IGoogleOAuthInput } from './inputs';
 import { AuthRefreshTokenService } from './auth-refresh-token.service';
 import {
@@ -11,6 +17,8 @@ import { MailService, TokenService } from '@common/services';
 
 @Injectable()
 export class OAuthService {
+  private readonly logger = new Logger(OAuthService.name);
+
   constructor(
     private readonly userService: UserService,
     @Inject(OAUTH_ACCOUNT_REPO) private readonly oAuthAccountRepository: IOAuthAccountRepository,
@@ -20,8 +28,12 @@ export class OAuthService {
   ) {}
 
   async checkOrCreateGoogleUser(googleOauthInput: IGoogleOAuthInput) {
-    const userCheck = await this.userService.getUserByEmail(googleOauthInput.email);
-    if (!userCheck) {
+    const existingUser = await this.userService.getUserByEmail(googleOauthInput.email);
+    if (existingUser) {
+      return existingUser;
+    }
+
+    try {
       const user = await this.userService.createUser({
         ...googleOauthInput,
         password: null,
@@ -29,6 +41,7 @@ export class OAuthService {
         middleName: null,
         activationLink: crypto.randomUUID(),
       });
+
       await this.oAuthAccountRepository.createAccount(
         OAuthAccountEntity.create({
           provider: googleOauthInput.provider,
@@ -36,9 +49,22 @@ export class OAuthService {
           userId: user.id,
         }),
       );
+
       return user;
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        const user = await this.userService.getUserByEmail(googleOauthInput.email);
+        if (user) {
+          return user;
+        }
+      }
+
+      this.logger.error(
+        'Failed to create OAuth user',
+        error instanceof Error ? error.message : 'Unknown error',
+      );
+      throw error;
     }
-    return userCheck;
   }
 
   async getOAuthUser(userId: string) {
@@ -46,13 +72,14 @@ export class OAuthService {
     if (!user) {
       throw new UnauthorizedException();
     }
+
     const tokens = await this.tokenService.signTokensAsync(
       {
         email: user.email,
         sub: user.id,
         role: '',
       },
-      { sub: user?.id, tokenId: 'tokenId' },
+      { sub: user.id, tokenId: 'tokenId' },
     );
 
     await this.authRefreshTokenService.addToken({
@@ -61,11 +88,18 @@ export class OAuthService {
     });
 
     if (user.activationLink && !user.isActive) {
-      await this.mailService.sendActivationEmail({
-        email: user.email,
-        userName: user.firstName,
-        link: user.activationLink,
-      });
+      try {
+        await this.mailService.sendActivationEmail({
+          email: user.email,
+          userName: user.firstName,
+          link: user.activationLink,
+        });
+      } catch (error) {
+        this.logger.warn(
+          'Failed to send activation email after OAuth login',
+          error instanceof Error ? error.message : 'Unknown error',
+        );
+      }
     }
 
     return {
