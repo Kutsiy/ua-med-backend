@@ -1,4 +1,4 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { IRefreshTokenCreateInput } from '@modules/auth/services';
 import {
@@ -10,6 +10,8 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthRefreshTokenService {
+  private readonly logger = new Logger(AuthRefreshTokenService.name);
+
   constructor(
     @Inject(REFRESH_TOKEN_REPO) private readonly refreshTokenRepo: IRefreshTokenRepository,
     private readonly configService: ConfigService,
@@ -20,7 +22,7 @@ export class AuthRefreshTokenService {
   }
 
   async addToken(createTokenInput: IRefreshTokenCreateInput) {
-    return this.refreshTokenRepo.addRefreshToken(
+    const refToken = await this.refreshTokenRepo.addRefreshToken(
       RefreshTokenEntity.create({
         ...createTokenInput,
         expiresAt: new Date(
@@ -30,6 +32,8 @@ export class AuthRefreshTokenService {
         token: this.hashToken(createTokenInput.token),
       }),
     );
+    this.logger.log(`Refresh token persisted: userId=${createTokenInput.userId}`);
+    return refToken;
   }
 
   async findValidToken(rawToken: string): Promise<RefreshTokenEntity | null> {
@@ -42,13 +46,16 @@ export class AuthRefreshTokenService {
 
   async closeUserTokens(userId: string) {
     await this.refreshTokenRepo.expireAllByUserId(userId);
+    this.logger.log(`All refresh tokens expired: userId=${userId}`);
   }
 
   async closeTokenByToken(token: string) {
     const storedToken = await this.findValidToken(token);
     if (!storedToken) {
+      this.logger.warn('Refresh token revocation failed: token not found or expired');
       throw new UnauthorizedException();
     }
     await this.refreshTokenRepo.expireByToken(this.hashToken(token));
+    this.logger.log(`Refresh token revoked: userId=${storedToken.userId}`);
   }
 }

@@ -15,8 +15,10 @@ export class AuthOtherService {
   async activateAccountByLink(activationLink: string) {
     const user = await this.userService.activateUser(activationLink);
     if (!user) {
+      this.logger.warn('Account activation failed: invalid or expired link');
       throw new BadRequestException('Invalid or expired activation link');
     }
+    this.logger.log(`Account activated: userId=${user.id}`);
     return user;
   }
 
@@ -32,11 +34,9 @@ export class AuthOtherService {
         link: user.passLink ?? '',
         userName: user.firstName,
       });
+      this.logger.log(`Password reset email initiated: userId=${user.id}`);
     } catch (error) {
-      this.logger.error(
-        'Failed to send password reset email',
-        error instanceof Error ? error.message : 'Unknown error',
-      );
+      this.logger.error(`Failed to initiate password reset: userId=${user.id}`);
       throw error;
     }
   }
@@ -44,6 +44,7 @@ export class AuthOtherService {
   async changePassword(newPass: string, passLink: string) {
     const user = await this.userService.getUserWhere({ passLink });
     if (!user) {
+      this.logger.warn('Password reset failed: invalid or expired link');
       throw new BadRequestException('Invalid or expired password reset link');
     }
 
@@ -53,6 +54,7 @@ export class AuthOtherService {
         passLink: null,
       });
 
+      this.logger.warn(`Password reset failed: link expired, userId=${user.id}`);
       throw new BadRequestException('Invalid or expired password reset link');
     }
 
@@ -62,5 +64,6 @@ export class AuthOtherService {
       passLinkExpAt: null,
       passLink: null,
     });
+    this.logger.log(`Password reset completed: userId=${user.id}`);
   }
 }

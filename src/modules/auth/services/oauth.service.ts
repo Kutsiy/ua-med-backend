@@ -30,6 +30,9 @@ export class OAuthService {
   async checkOrCreateGoogleUser(googleOauthInput: IGoogleOAuthInput) {
     const existingUser = await this.userService.getUserByEmail(googleOauthInput.email);
     if (existingUser) {
+      this.logger.log(
+        `OAuth login: existing user, userId=${existingUser.id}, provider=${googleOauthInput.provider}`,
+      );
       return existingUser;
     }
 
@@ -50,18 +53,24 @@ export class OAuthService {
         }),
       );
 
+      this.logger.log(
+        `OAuth user created: userId=${user.id}, provider=${googleOauthInput.provider}`,
+      );
       return user;
     } catch (error) {
       if (error instanceof ConflictException) {
         const user = await this.userService.getUserByEmail(googleOauthInput.email);
         if (user) {
+          this.logger.log(
+            `OAuth login: resolved race condition, userId=${user.id}, provider=${googleOauthInput.provider}`,
+          );
           return user;
         }
       }
 
       this.logger.error(
-        'Failed to create OAuth user',
-        error instanceof Error ? error.message : 'Unknown error',
+        `OAuth user creation failed: provider=${googleOauthInput.provider}`,
+        error instanceof Error ? error.stack : String(error),
       );
       throw error;
     }
@@ -70,6 +79,7 @@ export class OAuthService {
   async getOAuthUser(userId: string) {
     const user = await this.userService.getUserById(userId);
     if (!user) {
+      this.logger.warn(`OAuth callback failed: user not found, userId=${userId}`);
       throw new UnauthorizedException();
     }
 
@@ -94,14 +104,12 @@ export class OAuthService {
           userName: user.firstName,
           link: user.activationLink,
         });
-      } catch (error) {
-        this.logger.warn(
-          'Failed to send activation email after OAuth login',
-          error instanceof Error ? error.message : 'Unknown error',
-        );
+      } catch {
+        this.logger.warn(`Failed to send activation email after OAuth login: userId=${user.id}`);
       }
     }
 
+    this.logger.log(`OAuth login completed: userId=${user.id}`);
     return {
       tokens,
       user,

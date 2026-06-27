@@ -19,6 +19,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     }
 
     if (!user) {
+      this.logger.warn('JWT authentication failed: user not found in request');
       throw new UnauthorizedException();
     }
 

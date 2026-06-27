@@ -28,10 +28,11 @@ export class MailService {
           activationLink: `${this.configService.getOrThrow('MAIN_URL')}/auth/activate?link=${link}`,
         },
       });
+      this.logger.log(`Activation email sent: email=${email}`);
     } catch (error) {
       this.logger.error(
-        'Failed to send activation email',
-        error instanceof Error ? error.message : 'Unknown error',
+        `Failed to send activation email: email=${email}`,
+        error instanceof Error ? error.stack : String(error),
       );
       throw new InternalServerErrorException('Unable to send activation email');
     }
@@ -51,10 +52,11 @@ export class MailService {
           resetPasswordLink,
         },
       });
+      this.logger.log(`Password reset email sent: email=${email}`);
     } catch (error) {
       this.logger.error(
-        'Failed to send password reset email',
-        error instanceof Error ? error.message : 'Unknown error',
+        `Failed to send password reset email: email=${email}`,
+        error instanceof Error ? error.stack : String(error),
       );
       throw new InternalServerErrorException('Unable to send password reset email');
     }

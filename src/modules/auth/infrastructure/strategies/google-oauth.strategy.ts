@@ -1,5 +1,5 @@
 import googleOauthConfig from '@common/config/google-oauth.config';
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { type ConfigType } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-oauth20';
@@ -8,6 +8,8 @@ import { Profile } from 'passport';
 
 @Injectable()
 export class OAuthStrategy extends PassportStrategy(Strategy) {
+  private readonly logger = new Logger(OAuthStrategy.name);
+
   constructor(
     @Inject(googleOauthConfig.KEY)
     private readonly googleConfig: ConfigType<typeof googleOauthConfig>,
@@ -27,6 +29,7 @@ export class OAuthStrategy extends PassportStrategy(Strategy) {
     const secondName = profile.name?.familyName;
 
     if (!email) {
+      this.logger.warn(`OAuth validation failed: email missing, provider=${profile.provider}`);
       throw new UnauthorizedException('OAuth authentication failed');
     }
 

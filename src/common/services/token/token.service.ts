@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt';
-import { handleJwtError } from '@common/utils';
+import { handleJwtError } from '@common/error-handlers';
 
 export type AccessTokenPayload = {
   sub: string;
@@ -33,14 +33,17 @@ export class TokenService {
       });
     } catch (error) {
       this.logger.error(
-        'Access token signing failed',
-        error instanceof Error ? error.message : 'Unknown error',
+        `Access token signing failed: userId=${payload.sub}`,
+        error instanceof Error ? error.stack : String(error),
       );
       throw new InternalServerErrorException('Unable to generate token');
     }
   }
 
-  async signRefreshTokenAsync(payload: RefreshTokenPayload, options?: SignOptions): Promise<string> {
+  async signRefreshTokenAsync(
+    payload: RefreshTokenPayload,
+    options?: SignOptions,
+  ): Promise<string> {
     try {
       return await this.jwtService.signAsync(payload, {
         secret: this.configService.getOrThrow('REFRESH_SECRET'),
@@ -49,8 +52,8 @@ export class TokenService {
       });
     } catch (error) {
       this.logger.error(
-        'Refresh token signing failed',
-        error instanceof Error ? error.message : 'Unknown error',
+        `Refresh token signing failed: userId=${payload.sub}`,
+        error instanceof Error ? error.stack : String(error),
       );
       throw new InternalServerErrorException('Unable to generate token');
     }

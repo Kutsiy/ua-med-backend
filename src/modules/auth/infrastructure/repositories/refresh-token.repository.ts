@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { IRefreshTokenRepository, RefreshTokenEntity } from '@modules/auth/domain';
 import { PrismaService } from '@common/services';
 import { Prisma } from '@common/generated/prisma/client';
 import { RefreshTokenMapper } from '@modules/auth/infrastructure';
-import { withPrismaErrorHandling } from '@common/utils';
+import { withPrismaErrorHandling } from '@common/error-handlers';
 
 type PrismaClientOrTx = PrismaService | Prisma.TransactionClient;
 
 @Injectable()
 export class RefreshTokenRepository implements IRefreshTokenRepository {
+  private readonly logger = new Logger(RefreshTokenRepository.name);
+
   constructor(private readonly prismaService: PrismaService) {}
 
   async addRefreshToken(
@@ -70,11 +72,14 @@ export class RefreshTokenRepository implements IRefreshTokenRepository {
   async deleteExpired(tx?: Prisma.TransactionClient): Promise<void> {
     await withPrismaErrorHandling(async () => {
       const db = this.getClient(tx);
-      await db.refreshToken.deleteMany({
+      const result = await db.refreshToken.deleteMany({
         where: {
           OR: [{ expired: true }, { expiresAt: { lt: new Date() } }],
         },
       });
+      if (result.count > 0) {
+        this.logger.log(`Expired refresh tokens cleaned up: count=${result.count}`);
+      }
     }, 'deleteExpired');
   }
 

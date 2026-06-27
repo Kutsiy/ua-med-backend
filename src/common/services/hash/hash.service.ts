@@ -12,7 +12,7 @@ export class HashService {
     } catch (error) {
       this.logger.error(
         'Password hashing failed',
-        error instanceof Error ? error.message : 'Unknown error',
+        error instanceof Error ? error.stack : String(error),
       );
       throw new InternalServerErrorException('Unable to process password');
     }
@@ -24,7 +24,7 @@ export class HashService {
     } catch (error) {
       this.logger.error(
         'Password comparison failed',
-        error instanceof Error ? error.message : 'Unknown error',
+        error instanceof Error ? error.stack : String(error),
       );
       throw new InternalServerErrorException('Unable to verify password');
     }
