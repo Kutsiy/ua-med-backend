@@ -1,4 +1,4 @@
-import { Token } from '@common/models';
+import { Token } from './token.model';
 import { User } from '@modules/user';
 import { ObjectType, Field } from '@nestjs/graphql';
 

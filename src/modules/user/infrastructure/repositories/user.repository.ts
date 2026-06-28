@@ -16,7 +16,11 @@ export class UserRepository implements IUserRepository {
   }
 
   async getAllUsers(): Promise<UserEntity[]> {
-    const users = await this.prismaService.user.findMany();
+    const users = await this.prismaService.user.findMany({
+      include: {
+        accounts: true,
+      },
+    });
 
     return users.map((user) => UserMapper.toDomain(user));
   }

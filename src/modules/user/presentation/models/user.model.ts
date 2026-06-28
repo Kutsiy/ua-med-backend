@@ -43,10 +43,4 @@ export class User implements Pick<
   isActive!: boolean;
 
   activationLink!: string | null;
-
-  // myRoles: string[] | null = null;
-
-  // myBooking: string[] | null = null;
-
-  // myToken: string | null = null;
 }
