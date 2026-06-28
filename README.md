@@ -19,13 +19,13 @@ The project is focused on a modular backend architecture with clean separation b
 
 This project was built with the following technologies:
 
-* **NestJS** — backend framework
-* **Fastify** — HTTP adapter
-* **GraphQL** — API layer
-* **Prisma** — ORM and database access
-* **PostgreSQL** — main database
-* **Redis** — caching/session-related infrastructure
-* **TypeScript** — main programming language
+- **NestJS** — backend framework
+- **Fastify** — HTTP adapter
+- **GraphQL** — API layer
+- **Prisma** — ORM and database access
+- **PostgreSQL** — main database
+- **Redis** — caching/session-related infrastructure
+- **TypeScript** — main programming language
 
 ---
 
@@ -41,10 +41,10 @@ Frontend repository:
 
 Before running the project, make sure you have installed:
 
-* Node.js
-* npm
-* PostgreSQL
-* Redis
+- Node.js
+- npm
+- PostgreSQL
+- Redis
 
 Docker support will be added later.
 
@@ -82,7 +82,7 @@ You can use `.env.example` as a reference:
 cp .env.example .env
 ```
 
----  
+---
 
 ## Prisma Setup
 
@@ -190,16 +190,16 @@ Runs end-to-end tests.
 
 ## Main Features
 
-* Authentication and authorization
-* Access and refresh token flow
-* OAuth integration
-* User management
-* GraphQL API
-* PostgreSQL database integration
-* Prisma ORM layer
-* Redis integration
-* Global error handling
-* Modular NestJS architecture
+- Authentication and authorization
+- Access and refresh token flow
+- OAuth integration
+- User management
+- GraphQL API
+- PostgreSQL database integration
+- Prisma ORM layer
+- Redis integration
+- Global error handling
+- Modular NestJS architecture
 
 ---
 
@@ -273,11 +273,11 @@ The project is currently in active development.
 
 Planned improvements:
 
-* Docker configuration
-* Improved testing coverage
-* CI/CD pipeline
-* Better documentation
-* Deployment configuration
+- Docker configuration
+- Improved testing coverage
+- CI/CD pipeline
+- Better documentation
+- Deployment configuration
 
 ---
 
