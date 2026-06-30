@@ -1,13 +1,26 @@
 type PermissionCreateInput = {
   id: string;
   name: string;
+  action: PermissionAction;
+  resourse: string;
   description: string | null;
 };
+
+export const PERMISSION_ACTIONS = {
+  CREATE: 'CREATE',
+  READ: 'READ',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+} as const;
+
+export type PermissionAction = (typeof PERMISSION_ACTIONS)[keyof typeof PERMISSION_ACTIONS];
 
 export class PermissionEntity {
   constructor(
     private readonly _id: string,
     private readonly _name: string,
+    private readonly _action: PermissionAction,
+    private readonly _resource: string,
     private readonly _description: string | null,
   ) {}
 
@@ -23,10 +36,20 @@ export class PermissionEntity {
     return this._description;
   }
 
+  get action() {
+    return this._action;
+  }
+
+  get resource() {
+    return this._resource;
+  }
+
   create(permissionCreateInput: PermissionCreateInput) {
     return new PermissionEntity(
       permissionCreateInput.id,
       permissionCreateInput.name,
+      permissionCreateInput.action,
+      permissionCreateInput.resourse,
       permissionCreateInput.description,
     );
   }

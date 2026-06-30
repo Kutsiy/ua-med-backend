@@ -1,6 +1,15 @@
+enum Actions {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+}
+
 model Permission {
   id          String   @id @unique
   name        String   @unique
+  action      Actions
+  resource    String
   description String?
   role        RolePermission[]
 

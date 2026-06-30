@@ -1,5 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { IPermissionRepository, PermissionEntity } from '@modules/access-control/domain';
+import {
+  IPermissionRepository,
+  PermissionAction,
+  PermissionEntity,
+} from '@modules/access-control/domain';
 import { PrismaService } from '@common';
 import { PermissionMapper } from '../mappers';
 
@@ -30,8 +34,31 @@ export class PermissionRepository implements IPermissionRepository {
         name,
       },
     });
+
     return permission ? PermissionMapper.toDomain(permission) : null;
   }
+
+  async getPermissionByAcrtion(action: PermissionAction): Promise<PermissionEntity | null> {
+    this.logger.log(`Find permission by action=${action}`);
+    const permission = await this.prismaService.permission.findFirst({
+      where: {
+        action,
+      },
+    });
+
+    return permission ? PermissionMapper.toDomain(permission) : null;
+  }
+  async getPermissionByResource(resource: string): Promise<PermissionEntity | null> {
+    this.logger.log(`Find permission by resource=${resource}`);
+    const permission = await this.prismaService.permission.findFirst({
+      where: {
+        resource,
+      },
+    });
+
+    return permission ? PermissionMapper.toDomain(permission) : null;
+  }
+
   async createPermission(permission: PermissionEntity): Promise<PermissionEntity> {
     this.logger.log('Create permission');
     const createdPermission = await this.prismaService.permission.create({

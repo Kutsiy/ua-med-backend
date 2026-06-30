@@ -9,7 +9,11 @@
 * 🟢 You can import this file directly.
 */
 
+export const Actions = {
+  CREATE: 'CREATE',
+  READ: 'READ',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type Actions = (typeof Actions)[keyof typeof Actions]

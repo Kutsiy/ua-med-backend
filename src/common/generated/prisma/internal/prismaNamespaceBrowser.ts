@@ -101,6 +101,8 @@ export type OAuthAccountScalarFieldEnum = (typeof OAuthAccountScalarFieldEnum)[k
 export const PermissionScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  action: 'action',
+  resource: 'resource',
   description: 'description'
 } as const
 

@@ -992,6 +992,8 @@ export type OAuthAccountScalarFieldEnum = (typeof OAuthAccountScalarFieldEnum)[k
 export const PermissionScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  action: 'action',
+  resource: 'resource',
   description: 'description'
 } as const
 
@@ -1107,6 +1109,20 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'Actions'
+ */
+export type EnumActionsFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Actions'>
+    
+
+
+/**
+ * Reference to a field of type 'Actions[]'
+ */
+export type ListEnumActionsFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Actions[]'>
     
 
 
