@@ -1,25 +1,16 @@
 type PermissionCreateInput = {
   id: string;
   name: string;
-  action: PermissionAction;
+  action: string;
   resourse: string;
   description: string | null;
 };
-
-export const PERMISSION_ACTIONS = {
-  CREATE: 'CREATE',
-  READ: 'READ',
-  UPDATE: 'UPDATE',
-  DELETE: 'DELETE',
-} as const;
-
-export type PermissionAction = (typeof PERMISSION_ACTIONS)[keyof typeof PERMISSION_ACTIONS];
 
 export class PermissionEntity {
   constructor(
     private readonly _id: string,
     private readonly _name: string,
-    private readonly _action: PermissionAction,
+    private readonly _action: string,
     private readonly _resource: string,
     private readonly _description: string | null,
   ) {}

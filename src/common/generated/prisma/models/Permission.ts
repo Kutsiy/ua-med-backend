@@ -27,7 +27,7 @@ export type AggregatePermission = {
 export type PermissionMinAggregateOutputType = {
   id: string | null
   name: string | null
-  action: $Enums.Actions | null
+  action: string | null
   resource: string | null
   description: string | null
 }
@@ -35,7 +35,7 @@ export type PermissionMinAggregateOutputType = {
 export type PermissionMaxAggregateOutputType = {
   id: string | null
   name: string | null
-  action: $Enums.Actions | null
+  action: string | null
   resource: string | null
   description: string | null
 }
@@ -150,7 +150,7 @@ export type PermissionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type PermissionGroupByOutputType = {
   id: string
   name: string
-  action: $Enums.Actions
+  action: string
   resource: string
   description: string | null
   _count: PermissionCountAggregateOutputType | null
@@ -179,7 +179,7 @@ export type PermissionWhereInput = {
   NOT?: Prisma.PermissionWhereInput | Prisma.PermissionWhereInput[]
   id?: Prisma.StringFilter<"Permission"> | string
   name?: Prisma.StringFilter<"Permission"> | string
-  action?: Prisma.EnumActionsFilter<"Permission"> | $Enums.Actions
+  action?: Prisma.StringFilter<"Permission"> | string
   resource?: Prisma.StringFilter<"Permission"> | string
   description?: Prisma.StringNullableFilter<"Permission"> | string | null
   role?: Prisma.RolePermissionListRelationFilter
@@ -200,7 +200,7 @@ export type PermissionWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.PermissionWhereInput | Prisma.PermissionWhereInput[]
   OR?: Prisma.PermissionWhereInput[]
   NOT?: Prisma.PermissionWhereInput | Prisma.PermissionWhereInput[]
-  action?: Prisma.EnumActionsFilter<"Permission"> | $Enums.Actions
+  action?: Prisma.StringFilter<"Permission"> | string
   resource?: Prisma.StringFilter<"Permission"> | string
   description?: Prisma.StringNullableFilter<"Permission"> | string | null
   role?: Prisma.RolePermissionListRelationFilter
@@ -223,7 +223,7 @@ export type PermissionScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PermissionScalarWhereWithAggregatesInput | Prisma.PermissionScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Permission"> | string
   name?: Prisma.StringWithAggregatesFilter<"Permission"> | string
-  action?: Prisma.EnumActionsWithAggregatesFilter<"Permission"> | $Enums.Actions
+  action?: Prisma.StringWithAggregatesFilter<"Permission"> | string
   resource?: Prisma.StringWithAggregatesFilter<"Permission"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Permission"> | string | null
 }
@@ -231,7 +231,7 @@ export type PermissionScalarWhereWithAggregatesInput = {
 export type PermissionCreateInput = {
   id: string
   name: string
-  action: $Enums.Actions
+  action: string
   resource: string
   description?: string | null
   role?: Prisma.RolePermissionCreateNestedManyWithoutPermissionInput
@@ -240,7 +240,7 @@ export type PermissionCreateInput = {
 export type PermissionUncheckedCreateInput = {
   id: string
   name: string
-  action: $Enums.Actions
+  action: string
   resource: string
   description?: string | null
   role?: Prisma.RolePermissionUncheckedCreateNestedManyWithoutPermissionInput
@@ -249,7 +249,7 @@ export type PermissionUncheckedCreateInput = {
 export type PermissionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  action?: Prisma.EnumActionsFieldUpdateOperationsInput | $Enums.Actions
+  action?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.RolePermissionUpdateManyWithoutPermissionNestedInput
@@ -258,7 +258,7 @@ export type PermissionUpdateInput = {
 export type PermissionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  action?: Prisma.EnumActionsFieldUpdateOperationsInput | $Enums.Actions
+  action?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.RolePermissionUncheckedUpdateManyWithoutPermissionNestedInput
@@ -267,7 +267,7 @@ export type PermissionUncheckedUpdateInput = {
 export type PermissionCreateManyInput = {
   id: string
   name: string
-  action: $Enums.Actions
+  action: string
   resource: string
   description?: string | null
 }
@@ -275,7 +275,7 @@ export type PermissionCreateManyInput = {
 export type PermissionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  action?: Prisma.EnumActionsFieldUpdateOperationsInput | $Enums.Actions
+  action?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -283,7 +283,7 @@ export type PermissionUpdateManyMutationInput = {
 export type PermissionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  action?: Prisma.EnumActionsFieldUpdateOperationsInput | $Enums.Actions
+  action?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -317,10 +317,6 @@ export type PermissionScalarRelationFilter = {
   isNot?: Prisma.PermissionWhereInput
 }
 
-export type EnumActionsFieldUpdateOperationsInput = {
-  set?: $Enums.Actions
-}
-
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
@@ -342,7 +338,7 @@ export type PermissionUpdateOneRequiredWithoutRoleNestedInput = {
 export type PermissionCreateWithoutRoleInput = {
   id: string
   name: string
-  action: $Enums.Actions
+  action: string
   resource: string
   description?: string | null
 }
@@ -350,7 +346,7 @@ export type PermissionCreateWithoutRoleInput = {
 export type PermissionUncheckedCreateWithoutRoleInput = {
   id: string
   name: string
-  action: $Enums.Actions
+  action: string
   resource: string
   description?: string | null
 }
@@ -374,7 +370,7 @@ export type PermissionUpdateToOneWithWhereWithoutRoleInput = {
 export type PermissionUpdateWithoutRoleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  action?: Prisma.EnumActionsFieldUpdateOperationsInput | $Enums.Actions
+  action?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -382,7 +378,7 @@ export type PermissionUpdateWithoutRoleInput = {
 export type PermissionUncheckedUpdateWithoutRoleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  action?: Prisma.EnumActionsFieldUpdateOperationsInput | $Enums.Actions
+  action?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -468,7 +464,7 @@ export type $PermissionPayload<ExtArgs extends runtime.Types.Extensions.Internal
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
-    action: $Enums.Actions
+    action: string
     resource: string
     description: string | null
   }, ExtArgs["result"]["permission"]>
@@ -897,7 +893,7 @@ export interface Prisma__PermissionClient<T, Null = never, ExtArgs extends runti
 export interface PermissionFieldRefs {
   readonly id: Prisma.FieldRef<"Permission", 'String'>
   readonly name: Prisma.FieldRef<"Permission", 'String'>
-  readonly action: Prisma.FieldRef<"Permission", 'Actions'>
+  readonly action: Prisma.FieldRef<"Permission", 'String'>
   readonly resource: Prisma.FieldRef<"Permission", 'String'>
   readonly description: Prisma.FieldRef<"Permission", 'String'>
 }

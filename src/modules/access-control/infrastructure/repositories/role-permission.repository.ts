@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { IRolePermissionRepository } from '@modules/access-control/domain';
+import { IRolePermissionRepository, PermissionEntity } from '@modules/access-control/domain';
 import { PrismaService } from '@common';
+import { PermissionMapper } from '../mappers';
 
 @Injectable()
 export class RolePermissionRepository implements IRolePermissionRepository {
@@ -44,5 +45,48 @@ export class RolePermissionRepository implements IRolePermissionRepository {
         permissionId,
       },
     });
+  }
+
+  async getPermissionsByRoleId(roleId: string): Promise<PermissionEntity[]> {
+    this.logger.log(`Get permissions by roleId=${roleId}`);
+    const permissions = await this.prismaService.rolePermission.findMany({
+      where: {
+        roleId,
+      },
+      include: {
+        permission: true,
+      },
+    });
+
+    if (!permissions || permissions.length === 0) {
+      return [];
+    }
+    return permissions.map((permission) => PermissionMapper.toDomain(permission.permission));
+  }
+
+  async getPermissionsByUserId(userId: string): Promise<PermissionEntity[]> {
+    this.logger.log(`Find permissions by userId=${userId}`);
+    const rolePermissions = await this.prismaService.rolePermission.findMany({
+      where: {
+        role: {
+          user: {
+            some: {
+              userId,
+            },
+          },
+        },
+      },
+      include: {
+        permission: true,
+      },
+    });
+
+    const permissions = rolePermissions.map((rolePermission) =>
+      PermissionMapper.toDomain(rolePermission.permission),
+    );
+
+    return Array.from(
+      new Map(permissions.map((permission) => [permission.id, permission])).values(),
+    );
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { IRoleRepository, RoleEnity } from '@modules/access-control/domain';
+import { IRoleRepository, RoleEntity } from '@modules/access-control/domain';
 import { PrismaService } from '@common';
 import { RoleMapper } from '../mappers';
 
@@ -8,12 +8,12 @@ export class RoleRepository implements IRoleRepository {
   private readonly logger = new Logger(RoleRepository.name);
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getRoles(): Promise<RoleEnity[]> {
+  async getRoles(): Promise<RoleEntity[]> {
     this.logger.log('Get all roles');
     const roles = await this.prismaService.role.findMany();
     return roles.map((role) => RoleMapper.toDomain(role));
   }
-  async getRoleByID(id: string): Promise<RoleEnity | null> {
+  async getRoleByID(id: string): Promise<RoleEntity | null> {
     this.logger.log(`Find role by id=${id}`);
     const role = await this.prismaService.role.findUnique({
       where: {
@@ -22,7 +22,7 @@ export class RoleRepository implements IRoleRepository {
     });
     return role ? RoleMapper.toDomain(role) : null;
   }
-  async getRoleByName(name: string): Promise<RoleEnity | null> {
+  async getRoleByName(name: string): Promise<RoleEntity | null> {
     this.logger.log(`Find role by name=${name}`);
     const role = await this.prismaService.role.findUnique({
       where: {
@@ -31,14 +31,14 @@ export class RoleRepository implements IRoleRepository {
     });
     return role ? RoleMapper.toDomain(role) : null;
   }
-  async createRole(role: RoleEnity): Promise<RoleEnity> {
+  async createRole(role: RoleEntity): Promise<RoleEntity> {
     this.logger.log(`Create role`);
     const createdRole = await this.prismaService.role.create({
       data: RoleMapper.toObject(role),
     });
     return RoleMapper.toDomain(createdRole);
   }
-  async updateRole(role: RoleEnity): Promise<RoleEnity> {
+  async updateRole(role: RoleEntity): Promise<RoleEntity> {
     this.logger.log(`Update role by id=${role.id}`);
     const updatedRole = await this.prismaService.role.update({
       where: {

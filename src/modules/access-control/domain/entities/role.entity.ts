@@ -1,4 +1,4 @@
-export class RoleEnity {
+export class RoleEntity {
   constructor(
     private readonly _id: string,
     private readonly _name: string,
