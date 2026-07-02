@@ -1,8 +1,10 @@
+import { randomUUID } from 'crypto';
+
 export class RoleEntity {
   constructor(
     private readonly _id: string,
-    private readonly _name: string,
-    private readonly _description: string | null,
+    private _name: string,
+    private _description: string | null,
   ) {}
 
   get id(): string {
@@ -15,5 +17,22 @@ export class RoleEntity {
 
   get description(): string | null {
     return this._description;
+  }
+
+  set name(name: string) {
+    this._name = name;
+  }
+
+  set description(description: string | null) {
+    this._description = description;
+  }
+
+  updateProfile(profile: { name: string; description: string | null }) {
+    this._name = profile.name;
+    this._description = profile.description;
+  }
+
+  static create(name: string, description: string | null): RoleEntity {
+    return new RoleEntity(randomUUID(), name, description);
   }
 }

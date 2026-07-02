@@ -6,7 +6,7 @@ import { FastifyRequest } from 'fastify';
 import { RolePermissionService } from '@modules/access-control/services';
 
 @Injectable()
-export class PoliciesGuard implements CanActivate {
+export class PermissionsGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private caslAbilityFactory: CaslAbilityFactory,

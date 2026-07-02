@@ -6,9 +6,10 @@ import {
   RolePermissionRepository,
   RoleRepository,
   UserRoleRepository,
-} from '@modules/access-control/infrastructure';
+} from './infrastructure';
 import { CaslAbilityFactory } from './services';
 import { PERMISSION_REPO, ROLE_PERMISSION_REPO, ROLE_REPO, USER_ROLE_REPO } from './domain';
+import { PermissionsGuard } from './presentation';
 
 @Module({
   imports: [PrismaService],
@@ -34,6 +35,14 @@ import { PERMISSION_REPO, ROLE_PERMISSION_REPO, ROLE_REPO, USER_ROLE_REPO } from
     UserRoleService,
     RolePermissionService,
     CaslAbilityFactory,
+    PermissionsGuard,
+  ],
+  exports: [
+    PermissionsGuard,
+    PermissionService,
+    RoleService,
+    UserRoleService,
+    RolePermissionService,
   ],
 })
 export class AccessControl {}

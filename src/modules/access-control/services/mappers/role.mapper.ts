@@ -1,8 +1,8 @@
-import { RoleModel } from '@common/generated/prisma/models';
 import { RoleEntity } from '@modules/access-control/domain';
+import { IRoleOutput } from '../outputs/role.output';
 
 export class RoleMapper {
-  static toObject(role: RoleEntity): RoleModel {
+  static toOutput(role: RoleEntity): IRoleOutput {
     return {
       id: role.id,
       name: role.name,

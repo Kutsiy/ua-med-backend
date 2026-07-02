@@ -34,7 +34,7 @@ export class PermissionRepository implements IPermissionRepository {
     return permission ? PermissionMapper.toDomain(permission) : null;
   }
 
-  async getPermissionByAcrtion(action: string): Promise<PermissionEntity | null> {
+  async getPermissionByAction(action: string): Promise<PermissionEntity | null> {
     this.logger.log(`Find permission by action=${action}`);
     const permission = await this.prismaService.permission.findFirst({
       where: {
@@ -62,13 +62,13 @@ export class PermissionRepository implements IPermissionRepository {
     });
     return PermissionMapper.toDomain(createdPermission);
   }
-  async updatePermission(permissiom: PermissionEntity): Promise<PermissionEntity> {
-    this.logger.log(`Update permission by id=${permissiom.id}`);
+  async updatePermission(permission: PermissionEntity): Promise<PermissionEntity> {
+    this.logger.log(`Update permission by id=${permission.id}`);
     const updatedPermission = await this.prismaService.permission.update({
       where: {
-        id: permissiom.id,
+        id: permission.id,
       },
-      data: PermissionMapper.toObject(permissiom),
+      data: PermissionMapper.toObject(permission),
     });
     return PermissionMapper.toDomain(updatedPermission);
   }
