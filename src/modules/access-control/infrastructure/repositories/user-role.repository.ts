@@ -47,7 +47,7 @@ export class UserRoleRepository implements IUserRoleRepository {
       },
     });
   }
-  async findRolesByUserId(userId: string): Promise<RoleEntity[] | null> {
+  async findRolesByUserId(userId: string): Promise<RoleEntity[]> {
     this.logger.log(`Find roles by userId=${userId}`);
     const userRoles = await this.prismaService.userRole.findMany({
       where: {
@@ -58,6 +58,6 @@ export class UserRoleRepository implements IUserRoleRepository {
       },
     });
 
-    return userRoles.length > 0 ? userRoles.map((ur) => RoleMapper.toDomain(ur.role)) : null;
+    return userRoles.length > 0 ? userRoles.map((ur) => RoleMapper.toDomain(ur.role)) : [];
   }
 }
