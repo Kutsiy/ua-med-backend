@@ -49,6 +49,7 @@ export class UserMapper {
     return {
       firstName: user.firstName,
       secondName: user.secondName,
+      middleName: user.middleName,
       phoneNumber: user.phoneNumber,
       deletedAt: user.deletedAt,
       bannedAt: user.bannedAt,

@@ -1,6 +1,8 @@
 model Permission {
   id          String   @id @unique
   name        String   @unique
+  action      String
+  resource    String
   description String?
   role        RolePermission[]
 

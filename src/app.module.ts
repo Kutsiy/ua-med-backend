@@ -6,7 +6,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { AuthModule } from '@modules/auth/auth.module';
-import { UsersModule } from '@modules/user/user.module';
 import { APP_FILTER } from '@nestjs/core';
 import { GlobalGraphqlExceptionFilter, PrismaGraphqlExceptionFilter } from '@common/filters';
 import { FastifyReply, FastifyRequest } from 'fastify';
@@ -110,7 +109,6 @@ import { GraphQLFormattedError } from 'graphql';
       },
     }),
     AuthModule,
-    UsersModule,
   ],
   providers: [
     {

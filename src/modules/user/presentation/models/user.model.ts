@@ -1,22 +1,7 @@
 import { Field, ObjectType, ID } from '@nestjs/graphql';
-import type { UserModel } from '@common/generated/prisma/models';
 
 @ObjectType()
-export class User implements Pick<
-  UserModel,
-  | 'id'
-  | 'firstName'
-  | 'secondName'
-  | 'middleName'
-  | 'email'
-  | 'phoneNumber'
-  | 'createdAt'
-  | 'deletedAt'
-  | 'bannedAt'
-  | 'lastOnlineAt'
-  | 'isActive'
-  | 'activationLink'
-> {
+export class User {
   @Field(() => ID)
   id!: string;
 
@@ -43,10 +28,4 @@ export class User implements Pick<
   isActive!: boolean;
 
   activationLink!: string | null;
-
-  // myRoles: string[] | null = null;
-
-  // myBooking: string[] | null = null;
-
-  // myToken: string | null = null;
 }

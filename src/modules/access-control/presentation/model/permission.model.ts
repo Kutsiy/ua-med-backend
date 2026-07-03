@@ -1,12 +1,16 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import type { PermissionModel } from '@common/generated/prisma/models';
+import { IPermissionOutput } from '../../services';
 
 @ObjectType()
-export class Permission implements Pick<PermissionModel, 'id' | 'name' | 'description'> {
+export class Permission implements IPermissionOutput {
   @Field(() => ID)
   id!: string;
 
   name!: string;
 
   description: string | null = null;
+
+  action!: string;
+
+  resource!: string;
 }

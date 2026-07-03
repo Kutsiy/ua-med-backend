@@ -178,7 +178,7 @@ export type RolePermissionWhereUniqueInput = Prisma.AtLeast<{
   permissionId?: Prisma.StringFilter<"RolePermission"> | string
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
   permission?: Prisma.XOR<Prisma.PermissionScalarRelationFilter, Prisma.PermissionWhereInput>
-}, "roleId_permissionId">
+}, "roleId_permissionId" | "roleId_permissionId">
 
 export type RolePermissionOrderByWithAggregationInput = {
   roleId?: Prisma.SortOrder

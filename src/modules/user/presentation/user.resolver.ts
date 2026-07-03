@@ -26,7 +26,7 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  async createUser(@Args('UserCreateInput') userCreaInput: UserCreateInput) {
+  async createUser(@Args('input') userCreaInput: UserCreateInput) {
     return await this.userService.createUser({
       ...userCreaInput,
       activationLink: null,
@@ -36,7 +36,7 @@ export class UserResolver {
   @Mutation(() => User)
   async updateUserByEmail(
     @Args('email') email: string,
-    @Args('UserUpdateInput') userUpdateInput: UserUpdateInput,
+    @Args('input') userUpdateInput: UserUpdateInput,
   ) {
     return await this.userService.updateUserByEmail(email, userUpdateInput);
   }

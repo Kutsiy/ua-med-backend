@@ -18,8 +18,9 @@ model User {
   isActive       Boolean
   activationLink String? @unique @default(uuid())
 
-  accounts OAuthAccount[]
+  accounts       OAuthAccount[]
   refreshTokens  RefreshToken[]
+  roles          UserRole[]
 
   @@map("user")
 }

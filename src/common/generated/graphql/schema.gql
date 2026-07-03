@@ -26,6 +26,11 @@ input AuthSignUpInput {
   secondName: String!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Mutation {
   addPassword(authAddPasswordInput: AuthAddPassword!): Boolean!
   createUser(UserCreateInput: UserCreateInput!): User!
@@ -43,13 +48,32 @@ type Query {
   getUserById(id: String!): User
 }
 
+type Role {
+  description: String
+  id: ID!
+  name: String!
+}
+
 type Token {
   access_token: String!
   refresh_token: String!
 }
 
 type User {
+  activationLink: String
+  bannedAt: DateTime
+  birthDate: DateTime
+  createdAt: DateTime!
+  deletedAt: DateTime
+  email: String!
+  firstName: String!
   id: ID!
+  isActive: Boolean!
+  lastOnlineAt: DateTime
+  middleName: String
+  phoneNumber: String
+  roles: [Role!]!
+  secondName: String!
 }
 
 input UserCreateInput {
