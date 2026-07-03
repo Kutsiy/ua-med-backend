@@ -32,7 +32,7 @@ export class UserRoleService {
     const roles = await this.userRoleRepository.findRolesByUserId(userId);
 
     if (!roles || roles.length === 0) {
-      return null;
+      return [];
     }
 
     return roles.map((role) => RoleMapper.toOutput(role));

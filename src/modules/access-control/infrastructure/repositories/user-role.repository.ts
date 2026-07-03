@@ -20,7 +20,7 @@ export class UserRoleRepository implements IUserRoleRepository {
     });
   }
 
-  async removeUserRole(userId: string, roleId: string): Promise<void> {\
+  async removeUserRole(userId: string, roleId: string): Promise<void> {
     this.logger.log(`Remove role from user: userId=${userId}, roleId=${roleId}`);
     await this.prismaService.userRole.delete({
       where: {

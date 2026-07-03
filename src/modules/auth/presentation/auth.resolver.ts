@@ -15,7 +15,7 @@ export class AuthResolver {
 
   @Mutation(() => Auth)
   async login(
-    @Args('authLoginInput', { type: () => AuthLoginInput }) authLoginInput: AuthLoginInput,
+    @Args('input', { type: () => AuthLoginInput }) authLoginInput: AuthLoginInput,
     @Context() context: { res: FastifyReply },
   ) {
     const response = await this.authService.login(authLoginInput);
@@ -25,7 +25,7 @@ export class AuthResolver {
 
   @Mutation(() => Auth)
   async signUp(
-    @Args('authSignUpInput', { type: () => AuthSignUpInput }) authSignUpInput: AuthSignUpInput,
+    @Args('input', { type: () => AuthSignUpInput }) authSignUpInput: AuthSignUpInput,
     @Context() context: { res: FastifyReply },
   ) {
     const response = await this.authService.signUp(authSignUpInput);
@@ -61,7 +61,7 @@ export class AuthResolver {
   @UseGuards(JwtAuthGuard)
   @Mutation(() => Boolean)
   async addPassword(
-    @Args('authAddPasswordInput', { type: () => AuthAddPassword })
+    @Args('input', { type: () => AuthAddPassword })
     authAddPasswordInput: AuthAddPassword,
     @Context() context: { req: FastifyRequest & { user: { email: string } } },
   ) {

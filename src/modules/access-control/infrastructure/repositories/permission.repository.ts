@@ -34,25 +34,33 @@ export class PermissionRepository implements IPermissionRepository {
     return permission ? PermissionMapper.toDomain(permission) : null;
   }
 
-  async getPermissionByAction(action: string): Promise<PermissionEntity | null> {
-    this.logger.log(`Find permission by action=${action}`);
-    const permission = await this.prismaService.permission.findFirst({
+  async getPermissionByAction(action: string): Promise<PermissionEntity[]> {
+    this.logger.log(`Find permissions by action=${action}`);
+    const permissions = await this.prismaService.permission.findMany({
       where: {
         action,
       },
     });
 
-    return permission ? PermissionMapper.toDomain(permission) : null;
+    if (!permissions || permissions.length === 0) {
+      return [];
+    }
+
+    return permissions.map((permission) => PermissionMapper.toDomain(permission));
   }
-  async getPermissionByResource(resource: string): Promise<PermissionEntity | null> {
-    this.logger.log(`Find permission by resource=${resource}`);
-    const permission = await this.prismaService.permission.findFirst({
+  async getPermissionByResource(resource: string): Promise<PermissionEntity[]> {
+    this.logger.log(`Find permissions by resource=${resource}`);
+    const permissions = await this.prismaService.permission.findMany({
       where: {
         resource,
       },
     });
 
-    return permission ? PermissionMapper.toDomain(permission) : null;
+    if (!permissions || permissions.length === 0) {
+      return [];
+    }
+
+    return permissions.map((permission) => PermissionMapper.toDomain(permission));
   }
 
   async createPermission(permission: PermissionEntity): Promise<PermissionEntity> {

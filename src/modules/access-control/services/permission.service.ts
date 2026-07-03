@@ -38,23 +38,23 @@ export class PermissionService {
   }
 
   async getPermissionByAction(action: string) {
-    this.logger.log(`Fetching permission by action=${action}`);
-    const permission = await this.permissionRepository.getPermissionByAction(action);
-    if (!permission) {
-      this.logger.warn(`Permission not found: action=${action}`);
-      return null;
+    this.logger.log(`Fetching permissions by action=${action}`);
+    const permissions = await this.permissionRepository.getPermissionByAction(action);
+    if (!permissions || permissions.length === 0) {
+      this.logger.warn(`Permissions not found: action=${action}`);
+      return [];
     }
-    return PermissionMapper.toOutput(permission);
+    return permissions.map((permission) => PermissionMapper.toOutput(permission));
   }
 
   async getPermissionByResource(resource: string) {
-    this.logger.log(`Fetching permission by resource=${resource}`);
-    const permission = await this.permissionRepository.getPermissionByResource(resource);
-    if (!permission) {
-      this.logger.warn(`Permission not found: resource=${resource}`);
-      return null;
+    this.logger.log(`Fetching permissions by resource=${resource}`);
+    const permissions = await this.permissionRepository.getPermissionByResource(resource);
+    if (!permissions || permissions.length === 0) {
+      this.logger.warn(`Permissions not found: resource=${resource}`);
+      return [];
     }
-    return PermissionMapper.toOutput(permission);
+    return permissions.map((permission) => PermissionMapper.toOutput(permission));
   }
   async createPermission(permission: ICreatePermissionInput) {
     this.logger.log('Creating a new permission');

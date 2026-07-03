@@ -1,8 +1,7 @@
 import { ObjectType } from '@nestjs/graphql';
-import type { RolePermissionModel } from '@common/generated/prisma/models';
 
 @ObjectType()
-export class RolePermission implements Omit<RolePermissionModel, ''> {
+export class RolePermission {
   roleId!: string;
 
   permissionId!: string;

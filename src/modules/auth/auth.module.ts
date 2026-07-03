@@ -19,11 +19,13 @@ import { PrismaModule, TokenModule, MailModule, HashModule } from '@common/servi
 import { ConfigModule } from '@nestjs/config';
 import googleOauthConfig from '@common/config/google-oauth.config';
 import { OAUTH_ACCOUNT_REPO, REFRESH_TOKEN_REPO } from '@modules/auth/domain';
+import { AccessControlModule } from '../access-control';
 
 @Module({
   imports: [
     PassportModule,
     UsersModule,
+    AccessControlModule,
     TokenModule,
     ConfigModule.forFeature(googleOauthConfig),
     PrismaModule,
