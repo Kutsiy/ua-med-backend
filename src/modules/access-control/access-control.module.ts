@@ -9,7 +9,13 @@ import {
 } from './infrastructure';
 import { CaslAbilityFactory } from './services';
 import { PERMISSION_REPO, ROLE_PERMISSION_REPO, ROLE_REPO, USER_ROLE_REPO } from './domain';
-import { PermissionsGuard, UserRoleResolver } from './presentation';
+import {
+  PermissionsGuard,
+  UserRoleResolver,
+  RoleResolver,
+  RolePermissionResolver,
+  PermissionResolver,
+} from './presentation';
 
 @Module({
   imports: [PrismaModule],
@@ -37,9 +43,9 @@ import { PermissionsGuard, UserRoleResolver } from './presentation';
     CaslAbilityFactory,
     PermissionsGuard,
     UserRoleResolver,
-    RoleRepository,
-    PermissionRepository,
-    RolePermissionRepository,
+    RoleResolver,
+    RolePermissionResolver,
+    PermissionResolver,
   ],
   exports: [
     PermissionsGuard,

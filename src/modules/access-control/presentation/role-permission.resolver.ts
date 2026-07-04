@@ -17,7 +17,7 @@ export class RolePermissionResolver {
   constructor(private readonly rolePermissionService: RolePermissionService) {}
 
   @ResolveField('permissions', () => [Permission])
-  async findPermissionsByRoleId(@Parent() role: Role) {
+  async getPermissionsByRoleId(@Parent() role: Role) {
     this.logger.log(`Find permissions by roleId=${role.id}`);
     return await this.rolePermissionService.getPermissionsByRoleId(role.id);
   }
