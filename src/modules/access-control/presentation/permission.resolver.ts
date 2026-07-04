@@ -11,31 +11,31 @@ export class PermissionResolver {
   constructor(private readonly permissionService: PermissionService) {}
 
   @Query(() => [Permission])
-  async findAllPermissions() {
+  async getAllPermissions() {
     this.logger.log('Fetching all permissions');
     return await this.permissionService.getPermissions();
   }
 
   @Query(() => Permission, { nullable: true })
-  async findPermissionById(@Args('id') id: string) {
+  async getPermissionById(@Args('id') id: string) {
     this.logger.log(`Fetching permission by id=${id}`);
     return await this.permissionService.getPermissionById(id);
   }
 
   @Query(() => Permission, { nullable: true })
-  async findPermissionByName(@Args('name') name: string) {
+  async getPermissionByName(@Args('name') name: string) {
     this.logger.log(`Fetching permission by name=${name}`);
     return await this.permissionService.getPermissionByName(name);
   }
 
   @Query(() => [Permission])
-  async findPermissionByAction(@Args('action') action: string) {
+  async getPermissionByAction(@Args('action') action: string) {
     this.logger.log(`Fetching permissions by action=${action}`);
     return await this.permissionService.getPermissionByAction(action);
   }
 
   @Query(() => [Permission])
-  async findPermissionByResource(@Args('resource') resource: string) {
+  async getPermissionByResource(@Args('resource') resource: string) {
     this.logger.log(`Fetching permissions by resource=${resource}`);
     return await this.permissionService.getPermissionByResource(resource);
   }

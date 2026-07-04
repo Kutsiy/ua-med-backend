@@ -10,7 +10,6 @@ export type AccessTokenPayload = {
 };
 export type RefreshTokenPayload = {
   sub: string;
-  tokenId: string;
 };
 type SignOptions = Omit<JwtSignOptions, 'secret' | 'expiresIn'>;
 type VerifyOptions = Omit<JwtVerifyOptions, 'secret'>;

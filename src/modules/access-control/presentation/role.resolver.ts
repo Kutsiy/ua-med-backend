@@ -11,19 +11,19 @@ export class RoleResolver {
   constructor(private readonly roleService: RoleService) {}
 
   @Query(() => [Role])
-  async roles() {
+  async getAllroles() {
     this.logger.log('Fetching all roles');
     return await this.roleService.getRoles();
   }
 
   @Query(() => Role, { nullable: true })
-  async roleById(@Args('id') id: string) {
+  async getRoleById(@Args('id') id: string) {
     this.logger.log(`Fetching role by id=${id}`);
     return await this.roleService.getRoleById(id);
   }
 
   @Query(() => Role, { nullable: true })
-  async roleByName(@Args('name') name: string) {
+  async getRoleByName(@Args('name') name: string) {
     this.logger.log(`Fetching role by name=${name}`);
     return await this.roleService.getRoleByName(name);
   }
