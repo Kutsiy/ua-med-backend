@@ -1,5 +1,11 @@
 import { Module } from '@nestjs/common';
-import { PermissionService, RolePermissionService, RoleService, UserRoleService } from './services';
+import {
+  AccessControlService,
+  PermissionService,
+  RolePermissionService,
+  RoleService,
+  UserRoleService,
+} from './services';
 import { PrismaModule } from '@common';
 import {
   PermissionRepository,
@@ -40,6 +46,7 @@ import {
     },
     UserRoleService,
     RolePermissionService,
+    AccessControlService,
     CaslAbilityFactory,
     PermissionsGuard,
     UserRoleResolver,
@@ -53,6 +60,7 @@ import {
     RoleService,
     UserRoleService,
     RolePermissionService,
+    AccessControlService,
   ],
 })
 export class AccessControlModule {}

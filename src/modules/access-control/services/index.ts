@@ -5,3 +5,4 @@ export * from './user-role.service';
 export * from './factories';
 export * from './outputs';
 export * from './input';
+export * from './access-control.service';

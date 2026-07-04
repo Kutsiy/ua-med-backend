@@ -17,6 +17,7 @@ import {
   IAuthRefreshTokensInput,
   IAuthAddPassword,
 } from './inputs';
+import { AccessControlService } from '@modules/access-control';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +29,7 @@ export class AuthService {
     private readonly authRefreshTokenService: AuthRefreshTokenService,
     private readonly mailService: MailService,
     private readonly hashService: HashService,
+    private readonly accessControlService: AccessControlService,
   ) {}
 
   private async sendActivationEmail(user: {
@@ -59,7 +61,7 @@ export class AuthService {
         email: user.email,
         role: 'role',
       },
-      { sub: user.id, tokenId: 'tokenId' },
+      { sub: user.id },
     );
 
     await this.authRefreshTokenService.addToken({
@@ -124,6 +126,9 @@ export class AuthService {
       password: hashedPassword,
       activationLink: crypto.randomUUID(),
     });
+
+    await this.accessControlService.assingDefaultRoleToUser(user.id);
+
     const tokens = await this.genAndAddToken(user);
 
     await this.sendActivationEmail(user);
