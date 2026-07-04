@@ -6,7 +6,7 @@ export class RoleCreateInput implements IRoleCreateInput {
   @Field()
   name!: string;
 
-  @Field()
+  @Field(() => String, { nullable: true })
   description!: string | null;
 }
 

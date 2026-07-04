@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddRoleToUserInput {
+  roleId: String!
+  userId: String!
+}
+
 type Auth {
   tokens: Token!
   user: User!
@@ -32,20 +37,37 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Mutation {
-  addPassword(authAddPasswordInput: AuthAddPassword!): Boolean!
-  createUser(UserCreateInput: UserCreateInput!): User!
+  addPassword(input: AuthAddPassword!): Boolean!
+  addRoleToUser(input: AddRoleToUserInput!): Boolean!
+  createUser(input: UserCreateInput!): User!
   deleteUser(id: String!): String!
   logOut: Boolean!
-  login(authLoginInput: AuthLoginInput!): Auth!
+  login(input: AuthLoginInput!): Auth!
   refresh: Auth!
-  signUp(authSignUpInput: AuthSignUpInput!): Auth!
-  updateUserByEmail(UserUpdateInput: UserUpdateInput!, email: String!): User!
+  removeAllRolesFromUser(input: RemoveAllRolesFromUserInput!): Boolean!
+  removeRoleFromAllUsers(input: RemoveRoleFromAllUsersInput!): Boolean!
+  removeRoleFromUser(input: RemoveRoleFromUserInput!): Boolean!
+  signUp(input: AuthSignUpInput!): Auth!
+  updateUserByEmail(email: String!, input: UserUpdateInput!): User!
 }
 
 type Query {
   getAllUsers: [User!]!
   getUserByEmail(email: String!): User
   getUserById(id: String!): User
+}
+
+input RemoveAllRolesFromUserInput {
+  userId: String!
+}
+
+input RemoveRoleFromAllUsersInput {
+  roleId: String!
+}
+
+input RemoveRoleFromUserInput {
+  roleId: String!
+  userId: String!
 }
 
 type Role {

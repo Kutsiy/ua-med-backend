@@ -13,6 +13,7 @@ export default defineConfig({
   schema: 'src/common/schemas',
   migrations: {
     path: 'src/common/migrations',
+    seed: 'ts-node src/common/db/seed.ts',
   },
   datasource: {
     url: env('DATABASE_URL'),
