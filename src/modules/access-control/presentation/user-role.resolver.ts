@@ -17,7 +17,7 @@ export class UserRoleResolver {
   constructor(private readonly userRoleService: UserRoleService) {}
 
   @ResolveField('roles', () => [Role])
-  async findRolesByUserId(@Parent() user: User) {
+  async getRolesByUserId(@Parent() user: User) {
     this.logger.log(`Find roles by userId=${user.id}`);
     return await this.userRoleService.getRolesByUserId(user.id);
   }

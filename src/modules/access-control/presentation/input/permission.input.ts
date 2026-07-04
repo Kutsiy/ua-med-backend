@@ -1,4 +1,4 @@
-import { Field, ID, InputType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { ICreatePermissionInput, IUpdatePermissionInput } from '../../services';
 
 @InputType()
@@ -12,24 +12,24 @@ export class CreatePermissionInput implements ICreatePermissionInput {
   @Field()
   resource!: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   description!: string | null;
 }
 
 @InputType()
 export class UpdatePermissionInput implements IUpdatePermissionInput {
-  @Field(() => ID)
+  @Field(() => String)
   id!: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   name!: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   action!: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   resource!: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   description!: string | null;
 }

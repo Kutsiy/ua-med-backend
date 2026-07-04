@@ -30,4 +30,14 @@ export class OAuthAccountRepository implements IOAuthAccountRepository {
 
     this.logger.log(`OAuth account deleted: accountId=${id}`);
   }
+
+  async getAllAccountsByUserId(userId: string): Promise<OAuthAccountEntity[]> {
+    const accounts = await this.prismaService.oAuthAccount.findMany({
+      where: {
+        userId,
+      },
+    });
+
+    return accounts.map((account) => AccountMapper.toDomain(account));
+  }
 }

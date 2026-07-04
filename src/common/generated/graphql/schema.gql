@@ -2,6 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Account {
+  id: String!
+  provider: String!
+  providerAccountId: String!
+  userId: String!
+}
+
+input AddPermissionToRoleInput {
+  permissionId: String!
+  roleId: String!
+}
+
+input AddRoleToUserInput {
+  roleId: String!
+  userId: String!
+}
+
 type Auth {
   tokens: Token!
   user: User!
@@ -26,31 +43,106 @@ input AuthSignUpInput {
   secondName: String!
 }
 
+input CreatePermissionInput {
+  action: String!
+  description: String
+  name: String!
+  resource: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
 type Mutation {
-  addPassword(authAddPasswordInput: AuthAddPassword!): Boolean!
-  createUser(UserCreateInput: UserCreateInput!): User!
+  addPassword(input: AuthAddPassword!): Boolean!
+  addPermissionToRole(input: AddPermissionToRoleInput!): Boolean!
+  addRoleToUser(input: AddRoleToUserInput!): Boolean!
+  createPermission(input: CreatePermissionInput!): Permission!
+  createRole(input: RoleCreateInput!): Role!
+  createUser(input: UserCreateInput!): User!
+  deletePermissionById(id: String!): Boolean!
+  deleteRole(id: String!): Boolean!
   deleteUser(id: String!): String!
   logOut: Boolean!
-  login(authLoginInput: AuthLoginInput!): Auth!
+  login(input: AuthLoginInput!): Auth!
   refresh: Auth!
-  signUp(authSignUpInput: AuthSignUpInput!): Auth!
-  updateUserByEmail(UserUpdateInput: UserUpdateInput!, email: String!): User!
+  removeAllPermissionsFromRole(input: RemoveAllPermissionsFromRoleInput!): Boolean!
+  removeAllRolesFromUser(input: RemoveAllRolesFromUserInput!): Boolean!
+  removePermissionFromAllRoles(input: RemovePermissionFromAllRolesInput!): Boolean!
+  removePermissionFromRole(input: RemovePermissionFromRoleInput!): Boolean!
+  removeRoleFromAllUsers(input: RemoveRoleFromAllUsersInput!): Boolean!
+  removeRoleFromUser(input: RemoveRoleFromUserInput!): Boolean!
+  signUp(input: AuthSignUpInput!): Auth!
+  updatePermission(input: UpdatePermissionInput!): Permission
+  updateRole(input: RoleUpdateInput!): Role
+  updateUserByEmail(email: String!, input: UserUpdateInput!): User!
+}
+
+type Permission {
+  action: String!
+  description: String
+  id: ID!
+  name: String!
+  resource: String!
 }
 
 type Query {
+  getAllPermissions: [Permission!]!
   getAllUsers: [User!]!
+  getAllroles: [Role!]!
+  getPermissionByAction(action: String!): [Permission!]!
+  getPermissionById(id: String!): Permission
+  getPermissionByName(name: String!): Permission
+  getPermissionByResource(resource: String!): [Permission!]!
+  getRoleById(id: String!): Role
+  getRoleByName(name: String!): Role
   getUserByEmail(email: String!): User
   getUserById(id: String!): User
+}
+
+input RemoveAllPermissionsFromRoleInput {
+  roleId: String!
+}
+
+input RemoveAllRolesFromUserInput {
+  userId: String!
+}
+
+input RemovePermissionFromAllRolesInput {
+  permissionId: String!
+}
+
+input RemovePermissionFromRoleInput {
+  permissionId: String!
+  roleId: String!
+}
+
+input RemoveRoleFromAllUsersInput {
+  roleId: String!
+}
+
+input RemoveRoleFromUserInput {
+  roleId: String!
+  userId: String!
 }
 
 type Role {
   description: String
   id: ID!
+  name: String!
+  permissions: [Permission!]!
+}
+
+input RoleCreateInput {
+  description: String
+  name: String!
+}
+
+input RoleUpdateInput {
+  description: String!
+  id: String!
   name: String!
 }
 
@@ -59,7 +151,16 @@ type Token {
   refresh_token: String!
 }
 
+input UpdatePermissionInput {
+  action: String
+  description: String
+  id: String!
+  name: String
+  resource: String
+}
+
 type User {
+  accounts: [Account!]!
   activationLink: String
   bannedAt: DateTime
   birthDate: DateTime

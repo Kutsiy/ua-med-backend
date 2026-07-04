@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthResolver, AuthController } from '@modules/auth/presentation';
+import { AuthResolver, AuthController, UserAccountResolver } from '@modules/auth/presentation';
 import { UsersModule } from '@modules/user';
 import { PassportModule } from '@nestjs/passport';
 import {
@@ -35,6 +35,7 @@ import { AccessControlModule } from '../access-control';
   controllers: [AuthController],
   providers: [
     AuthResolver,
+    UserAccountResolver,
     JwtStrategy,
     AuthService,
     OAuthStrategy,

@@ -14,6 +14,9 @@ import {
   type IOAuthAccountRepository,
 } from '@modules/auth/domain';
 import { MailService, TokenService } from '@common/services';
+import { AccessControlService } from '@modules/access-control';
+import { AccountMapper } from './mappers';
+import { IAccountsOutput } from './outputs';
 
 @Injectable()
 export class OAuthService {
@@ -25,6 +28,7 @@ export class OAuthService {
     private readonly tokenService: TokenService,
     private readonly authRefreshTokenService: AuthRefreshTokenService,
     private readonly mailService: MailService,
+    private readonly accessControlService: AccessControlService,
   ) {}
 
   async checkOrCreateGoogleUser(googleOauthInput: IGoogleOAuthInput) {
@@ -44,6 +48,8 @@ export class OAuthService {
         middleName: null,
         activationLink: crypto.randomUUID(),
       });
+
+      await this.accessControlService.assingDefaultRoleToUser(user.id);
 
       await this.oAuthAccountRepository.createAccount(
         OAuthAccountEntity.create({
@@ -89,7 +95,7 @@ export class OAuthService {
         sub: user.id,
         role: '',
       },
-      { sub: user.id, tokenId: 'tokenId' },
+      { sub: user.id },
     );
 
     await this.authRefreshTokenService.addToken({
@@ -114,5 +120,12 @@ export class OAuthService {
       tokens,
       user,
     };
+  }
+
+  async getAllAccountsByUserId(userId: string): Promise<IAccountsOutput[]> {
+    this.logger.log(`Find all user accounts by id, userId=${userId}`);
+    const accounts = await this.oAuthAccountRepository.getAllAccountsByUserId(userId);
+
+    return accounts.map((account) => AccountMapper.toOutput(account));
   }
 }

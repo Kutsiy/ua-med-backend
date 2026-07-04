@@ -20,7 +20,9 @@
     "test:e2e": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json",
     "pri:generate": "npx prisma generate",
     "pri:migrate:dev": "npx dotenv-cli -e .env.development -- npx prisma migrate dev",
-    "pri:clear:dev": "npx dotenv-cli -e .env.development -- npx prisma migrate reset"
+    "pri:clear:dev": "npx dotenv-cli -e .env.development -- npx prisma migrate reset",
+    "pri:seed": "npx dotenv-cli -e .env.development -- npx prisma db seed",
+    "pri:studio": "npx dotenv-cli -e .env.development -- npx prisma studio"
   },
   "dependencies": {
     "@apollo/server": "^5.5.1",
