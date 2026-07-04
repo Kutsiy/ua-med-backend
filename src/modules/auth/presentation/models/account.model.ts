@@ -1,8 +1,8 @@
-import { OAuthAccount } from '@common/generated/prisma/client';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { IAccountsOutput } from '../../services/outputs';
 
 @ObjectType()
-export class Account implements OAuthAccount {
+export class Account implements IAccountsOutput {
   @Field()
   id!: string;
 

@@ -15,6 +15,8 @@ import {
 } from '@modules/auth/domain';
 import { MailService, TokenService } from '@common/services';
 import { AccessControlService } from '@modules/access-control';
+import { AccountMapper } from './mappers';
+import { IAccountsOutput } from './outputs';
 
 @Injectable()
 export class OAuthService {
@@ -118,5 +120,12 @@ export class OAuthService {
       tokens,
       user,
     };
+  }
+
+  async getAllAccountsByUserId(userId: string): Promise<IAccountsOutput[]> {
+    this.logger.log(`Find all user accounts by id, userId=${userId}`);
+    const accounts = await this.oAuthAccountRepository.getAllAccountsByUserId(userId);
+
+    return accounts.map((account) => AccountMapper.toOutput(account));
   }
 }
