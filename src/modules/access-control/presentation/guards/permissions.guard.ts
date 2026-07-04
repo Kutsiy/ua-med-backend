@@ -4,6 +4,13 @@ import { Reflector } from '@nestjs/core';
 import { CHECK_PERMISSIONS_KEY, PermissionHandler } from '../decorators';
 import { FastifyRequest } from 'fastify';
 import { RolePermissionService } from '@modules/access-control/services';
+import { GqlExecutionContext } from '@nestjs/graphql';
+
+type RequestWithUser = FastifyRequest & {
+  user?: {
+    id: string;
+  };
+};
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
@@ -17,7 +24,10 @@ export class PermissionsGuard implements CanActivate {
     const policyHandlers =
       this.reflector.get<PermissionHandler[]>(CHECK_PERMISSIONS_KEY, context.getHandler()) || [];
 
-    const { user } = context.switchToHttp().getRequest<FastifyRequest & { user: { id: string } }>();
+    const ctx = GqlExecutionContext.create(context);
+    const req = ctx.getContext<{ req: RequestWithUser }>().req;
+
+    const user = req.user;
 
     if (!user || !user.id) {
       return false;

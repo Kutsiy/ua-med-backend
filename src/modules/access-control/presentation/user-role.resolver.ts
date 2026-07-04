@@ -1,7 +1,7 @@
 import { Args, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { Logger } from '@nestjs/common';
 import { UserRoleService } from '../services';
-import { User } from '@modules/user';
+import { User } from '@modules/user/presentation';
 import { Role } from './model/role.model';
 import {
   AddRoleToUserInput,

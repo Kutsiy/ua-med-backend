@@ -59,6 +59,8 @@ import {
     PermissionService,
     RoleService,
     UserRoleService,
+    PermissionsGuard,
+    CaslAbilityFactory,
     RolePermissionService,
     AccessControlService,
   ],

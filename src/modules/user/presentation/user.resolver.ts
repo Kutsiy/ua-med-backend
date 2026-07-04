@@ -3,13 +3,16 @@ import { User, UserCreateInput, UserUpdateInput, UserMapper } from '@modules/use
 import { UserService } from '@modules/user/services';
 import { JwtAuthGuard } from '@common';
 import { UseGuards } from '@nestjs/common';
+import { CheckPermissions, PermissionsGuard } from '@modules/access-control/presentation';
+import { type AppAbility } from '@modules/access-control/services';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(() => [User])
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @CheckPermissions((ability: AppAbility) => ability.can('read', 'user'))
   async getAllUsers() {
     const users = await this.userService.getAllUsers();
     return users.map((user) => UserMapper.toOutput(user));
