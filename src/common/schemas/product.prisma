@@ -1,0 +1,15 @@
+model Product {
+    id String @id @unique
+
+    name String @unique
+    brandName String
+
+    taste String
+    activeIngredient String
+    terms String
+    description String?
+
+    
+
+    categories Category[]
+}

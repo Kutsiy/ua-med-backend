@@ -1,0 +1,7 @@
+model Category {
+    id String @id @unique
+
+    name String @unique
+
+    medications Product[]
+}
