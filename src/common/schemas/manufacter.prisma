@@ -1,0 +1,9 @@
+model Manufacturer {
+  id          String @id @default(cuid())
+
+  name        String
+  country     String?
+  website     String?
+
+  products    Product[]
+}

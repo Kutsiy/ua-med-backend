@@ -1,0 +1,8 @@
+model Ingredient {
+  id          String @id @default(cuid())
+
+  name        String
+  internationalName String?
+
+  products    ProductIngredient[]
+}

@@ -1,0 +1,9 @@
+model ProductExcipient {
+  id                String @id @default(cuid())
+
+  productVariantId  String
+  productVariant    ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
+
+  excipientId       String
+  excipient         Excipient @relation(fields: [excipientId], references: [id])
+}

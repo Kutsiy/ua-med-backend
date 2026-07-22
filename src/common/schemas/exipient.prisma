@@ -1,0 +1,7 @@
+model Excipient {
+  id          String @id @default(cuid())
+
+  name        String
+
+  products    ProductExcipient[]
+}

@@ -1,0 +1,9 @@
+model ProductCharacteristic {
+  id                  String @id @default(cuid())
+
+  productVariantId     String
+  productVariant       ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
+
+  key                 String
+  value               String
+}

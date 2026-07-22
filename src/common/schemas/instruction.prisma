@@ -1,0 +1,27 @@
+model Instruction {
+  id                    String @id @default(cuid())
+
+  productVariantId       String @unique
+  productVariant         ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
+
+  composition            String? @db.Text
+
+  pharmacodynamics       String? @db.Text
+  pharmacokinetics       String? @db.Text
+
+  indications            String? @db.Text
+  contraindications      String? @db.Text
+  interactions           String? @db.Text
+
+  warnings               String? @db.Text
+
+  pregnancy              String? @db.Text
+  driving                String? @db.Text
+
+  dosage                 String? @db.Text
+  overdose               String? @db.Text
+  sideEffects            String? @db.Text
+
+  storage                String? @db.Text
+  packageInfo            String? @db.Text
+}
