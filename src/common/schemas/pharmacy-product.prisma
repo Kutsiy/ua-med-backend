@@ -1,0 +1,21 @@
+model PharmacyProduct {
+  id                String @id @default(cuid())
+
+  pharmacyId         String
+  pharmacy           Pharmacy @relation(fields: [pharmacyId], references: [id], onDelete: Cascade)
+
+  productVariantId   String
+  productVariant     ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
+
+  price              Decimal @db.Decimal(10, 2)
+
+  quantity           Int?
+
+  inStock            Boolean @default(true)
+
+  externalUrl        String?
+
+  updatedAt          DateTime @updatedAt
+
+  @@unique([pharmacyId, productVariantId])
+}
