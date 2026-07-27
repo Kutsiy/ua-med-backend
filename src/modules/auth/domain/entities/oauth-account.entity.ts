@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto';
+
 type OAuthAccountCreateProps = {
   provider: string;
   providerAccountId: string;
@@ -33,6 +35,6 @@ export class OAuthAccountEntity {
     providerAccountId,
     userId,
   }: OAuthAccountCreateProps): OAuthAccountEntity {
-    return new OAuthAccountEntity(crypto.randomUUID(), provider, providerAccountId, userId);
+    return new OAuthAccountEntity(randomUUID(), provider, providerAccountId, userId);
   }
 }
