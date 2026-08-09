@@ -11,6 +11,32 @@ import { GlobalGraphqlExceptionFilter, PrismaGraphqlExceptionFilter } from '@com
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { JwtAuthGuard } from '@common';
 import { GraphQLFormattedError } from 'graphql';
+import pino from 'pino';
+
+const streams = [
+  {
+    stream: pino.transport({
+      target: 'pino-pretty',
+      options: {
+        colorize: true,
+        singleLine: true,
+      },
+    }),
+  },
+  {
+    stream: pino.transport({
+      target: 'pino-loki',
+      options: {
+        host: 'http://localhost:3100',
+        labels: {
+          app: 'ua-med-backend',
+        },
+        batching: true,
+        interval: 5,
+      },
+    }),
+  },
+];
 
 @Module({
   imports: [
@@ -40,19 +66,7 @@ import { GraphQLFormattedError } from 'graphql';
             };
           },
         },
-        transport:
-          process.env.NODE_ENV !== 'production'
-            ? {
-                target: 'pino-pretty',
-                options: {
-                  colorize: true,
-                  singleLine: true,
-                  host: 'http://localhost:3100',
-                  json: true,
-                  batch: true,
-                },
-              }
-            : undefined,
+        stream: pino.multistream(streams),
       },
       ...nativeLoggerOptions,
     }),
