@@ -22,7 +22,10 @@
     "pri:migrate:dev": "npx dotenv-cli -e .env.development -- npx prisma migrate dev",
     "pri:clear:dev": "npx dotenv-cli -e .env.development -- npx prisma migrate reset",
     "pri:seed": "npx dotenv-cli -e .env.development -- npx prisma db seed",
-    "pri:studio": "npx dotenv-cli -e .env.development -- npx prisma studio"
+    "pri:studio": "npx dotenv-cli -e .env.development -- npx prisma studio",
+    "d:dev:build": "docker compose -f compose.development.yml --env-file .env.development build",
+    "d:dev:run": "docker compose -f compose.development.yml --env-file .env.development up",
+    "d:dev:stop": "docker compose -f compose.development.yml --env-file .env.development down"
   },
   "dependencies": {
     "@apollo/server": "^5.5.1",
@@ -55,6 +58,7 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pino-http": "^11.0.0",
+    "pino-loki": "^3.0.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },

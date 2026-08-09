@@ -47,6 +47,9 @@ import { GraphQLFormattedError } from 'graphql';
                 options: {
                   colorize: true,
                   singleLine: true,
+                  host: 'http://localhost:3100',
+                  json: true,
+                  batch: true,
                 },
               }
             : undefined,
