@@ -11,6 +11,7 @@ import { GlobalGraphqlExceptionFilter, PrismaGraphqlExceptionFilter } from '@com
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { JwtAuthGuard } from '@common';
 import { GraphQLFormattedError } from 'graphql';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import pino from 'pino';
 
 const streams = [
@@ -126,6 +127,7 @@ const streams = [
       },
     }),
     AuthModule,
+    PrometheusModule.register(),
   ],
   providers: [
     {
