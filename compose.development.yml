@@ -2,7 +2,7 @@ services:
   db:
     image: postgres:16-alpine
     container_name: postgres_db
-    restart: always
+    restart: unless-stopped
     ports:
       - '5432:5432'
     environment:
@@ -14,37 +14,91 @@ services:
 
   loki:
     image: grafana/loki:latest
+    container_name: loki
+    restart: unless-stopped
+
     ports:
       - '3100:3100'
-    command: -config.file=/etc/loki/local-config.yaml
+
+    command:
+      - -config.file=/etc/loki/config.yml
+
     volumes:
+      - ./loki-config.yaml:/etc/loki/config.yml:ro
       - loki_data:/loki
+
     healthcheck:
       test: ['CMD-SHELL', 'wget -q --tries=1 -O- http://localhost:3100/ready']
       interval: 10s
       timeout: 5s
       retries: 5
+
+  alloy:
+    image: grafana/alloy:latest
+    container_name: alloy
     restart: unless-stopped
+
+    command:
+      - run
+      - /etc/alloy/config.alloy
+      - --storage.path=/var/lib/alloy/data
+
+    ports:
+      - '12345:12345'
+
+    volumes:
+      - ./config.alloy:/etc/alloy/config.alloy:ro
+      - alloy_data:/var/lib/alloy/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    depends_on:
+      - loki
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+
+    ports:
+      - '9090:9090'
+
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
 
   grafana:
     image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+
     ports:
       - '3001:3000'
+
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+
     depends_on:
       - loki
+      - prometheus
+
     volumes:
-      - grafana_data:/var/lib/grafana
+      - ./grafana_data:/var/lib/grafana
+      - ./datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+
     healthcheck:
-      test: ['CMD-SHELL', 'wget -q --tries=1 -O- http://localhost:3001/api/health']
+      test: ['CMD-SHELL', 'wget -q --tries=1 -O- http://localhost:3000/api/health']
       interval: 10s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
 
 volumes:
   pgdata:
   loki_data:
+  alloy_data:
   grafana_data:
+  prometheus-data:
